@@ -27,10 +27,9 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
      if (sender() == self.admin) {            
-            // Transfer the TONs back to the specified sender
             send(SendParameters{
                 to: msg.sender,
-                value: 0,
+                value: myBalance() - context().value,
                 mode: SendRemainingValue + SendIgnoreErrors
             });
         }
@@ -39,8 +38,8 @@ contract Task2 with Deployable {
   receive(msg: Slice) {
             send(SendParameters{
                 to: self.admin,
-                value: context().value,
-                mode: SendRemainingValue,
+                value: myBalance() - context().value,
+                mode: SendRemainingBalance + SendIgnoreErrors,
                 body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
             });
   }
