@@ -60,11 +60,14 @@ contract Task4 with Deployable {
   }
 
   get fun time(): Int {
+    return 0;
   }
 
   get fun nft(): Address? {
+    return null;
   }
 
   get fun owner(): Address? {
+    return null;
   }
 }
