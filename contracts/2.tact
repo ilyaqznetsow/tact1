@@ -30,13 +30,12 @@ contract Task2 with Deployable {
     require(msg.sender == self.admin, 101, "Unauthorized sender");
     
     // Calculate the attached deposit (TONs) for the refund
-    let refundAmount = msg.value;
 
     // Ensure there are enough funds in the contract to refund
-    require(self.balance >= refundAmount, 102, "Insufficient balance for refund");
+    require(self.balance >= msg.value, 102, "Insufficient balance for refund");
 
     // Transfer the TONs back to the user specified in the Refund message
-    transfer(refundAmount, msg.sender);
+    transfer(msg.value, msg.sender);
   }
 
   receive(msg: Slice) {
