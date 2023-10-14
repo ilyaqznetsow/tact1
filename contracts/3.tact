@@ -10,9 +10,14 @@ import "@stdlib/deploy";
   Decimals are only needed for price accuracy. It should be set as 1e9.
   So, if smart contract has 10 of jetton A and 2 of jetton B, then after sending 1 jetton B you should receive 5 of jettons A.
 
-  If smart contract pool doesn't have enough jettons to trade
-  (for example someone sends 99999 jettons of B, but dex pool only has 10 of jettons A),
-  then sent incoming jettons (B, in our example) back to the sender.
+  Example formula for amountOfBJettonToSend in A->B swap will be
+  (amountOfJettonAOnContract * decimal / amountOfJettonBOnContract) * amountOfTokenAToSwap / decimal
+
+  If smart contract pool doesn't have enough jettons to trade,
+  then it should send incoming jettons back to the user. For a clearer explanation,
+  let's look at the example we described above (smart contract has 10 of jetton A and 2 of jetton B).
+  If user will send 3 jettons B, smart contract should reject the message (because contract does not have 3 * 5 = 15 jettons A)
+  and send 3 jettons B back to the user.
 
   If smart contract receives a different jetton (neither A nor B) then throw an error.
 
@@ -63,18 +68,39 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) { 
       let valueToSend: Int = 0;
-      let price: Int = 0;
-      price = self.price(msg.from);
+      let sendBack: Bool = false;
+
+      valueToSend = (self.a * self.decimal / self.b) * msg.amount / self.decimal;
 
         if (msg.from == self.jAddressA) {
             self.a = self.a + msg.amount;
+            sendBack = self.b < valueToSend;
         } else if (msg.from == self.jAddressB) {
             self.b = self.b + msg.amount;
+            sendBack = self.a < valueToSend;
         } else {
           throw(132);
         }
 
-      valueToSend = price * msg.amount / self.decimal;
+
+      if(sendBack){
+        send(SendParameters{
+          to: context().sender,
+          value: 0, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
+          bounce: true, 
+          body: TokenTransfer {
+            queryId: msg.queryId,
+            amount: msg.amount,
+            destination: msg.from,
+            responseDestination: null,
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: msg.forwardPayload
+          }.toCell()
+        });
+        return;
+      }
       
       if(context().sender != self.owner){
       
