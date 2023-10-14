@@ -60,13 +60,34 @@ contract Task3 with Deployable {
     self.decimal = 1000000000;
   }
 
-  receive(msg: JettonNotification) {
-    // Handle jetton notifications here
+  receive(msg: JettonNotification) {  
+      let valueToSend: coins = 0;
+
         if (msg.from == self.jettonAddressA) {
             self.aAmount = self.aAmount + msg.amount;
+            valueToSend = self.bAmount / self.aAmount;
         } else if (msg.from == self.jettonAddressB) {
             self.bAmount = self.bAmount + msg.amount;
+            valueToSend = self.aAmount / self.bAmount;
+        } else {
+          throw(132);
         }
+      
+      
+      send(SendParameters{
+        to: context().sender,
+        value: 0, 
+        mode: SendRemainingValue + SendIgnoreErrors, 
+        bounce: true, 
+        body: JettonTransfer{
+          queryId: msg.queryId,
+          amount: valueToSend,
+          destination: msg.from,
+          destination: Address;
+          forwardTonAmount: 0;
+          forwardPayload: msg.forwardPayload;
+        }.toCell()
+      });
   } 
   
   get fun price(jetton: Address): Int { 
