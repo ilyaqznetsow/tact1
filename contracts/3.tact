@@ -61,61 +61,61 @@ contract Task3 with Deployable {
   }
 
   receive(msg: JettonNotification) { 
-      let valueToSend: Int = 0;
-      let price: Int = 0;
-      price = self.price(msg.from);
+      // let valueToSend: Int = 0;
+      // let price: Int = 0;
+      // price = self.price(msg.from);
 
-        if (msg.from == self.jettonAddressA) {
-            self.aAmount = self.aAmount + msg.amount;
-        } else if (msg.from == self.jettonAddressB) {
-            self.bAmount = self.bAmount + msg.amount;
-        } else {
-          throw(132);
-        }
+      //   if (msg.from == self.jettonAddressA) {
+      //       self.aAmount = self.aAmount + msg.amount;
+      //   } else if (msg.from == self.jettonAddressB) {
+      //       self.bAmount = self.bAmount + msg.amount;
+      //   } else {
+      //     throw(132);
+      //   }
 
-      valueToSend = price * msg.amount / self.decimal;
+      // valueToSend = price * msg.amount / self.decimal;
       
-      if(context().sender != self.owner){
+      // if(context().sender != self.owner){
       
-        send(SendParameters{
-          to: context().sender,
-          value: 0, 
-          mode: SendRemainingValue + SendIgnoreErrors, 
-          bounce: true, 
-          body: JettonTransfer {
-            queryId: msg.queryId,
-            amount: valueToSend,
-            destination: msg.from,
-            responseDestination: null,
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: msg.forwardPayload
-          }.toCell()
-        });
-      }
+      //   send(SendParameters{
+      //     to: context().sender,
+      //     value: 0, 
+      //     mode: SendRemainingValue + SendIgnoreErrors, 
+      //     bounce: true, 
+      //     body: JettonTransfer {
+      //       queryId: msg.queryId,
+      //       amount: valueToSend,
+      //       destination: msg.from,
+      //       responseDestination: null,
+      //       customPayload: null,
+      //       forwardTonAmount: 0,
+      //       forwardPayload: msg.forwardPayload
+      //     }.toCell()
+      //   });
+      // }
   } 
   
   get fun price(jetton: Address): Int { 
-    if (jetton == self.jettonAddressA) {
-      if (self.bAmount == 0) {
-        return 0;
-      }
-      return (self.aAmount * self.decimal) / self.bAmount;
-    } else if (jetton == self.jettonAddressB) {
-      if (self.aAmount == 0) {
-        return 0;
-      }
-      return (self.bAmount * self.decimal) / self.aAmount;
-    }
+    // if (jetton == self.jettonAddressA) {
+    //   if (self.bAmount == 0) {
+    //     return 0;
+    //   }
+    //   return (self.aAmount * self.decimal) / self.bAmount;
+    // } else if (jetton == self.jettonAddressB) {
+    //   if (self.aAmount == 0) {
+    //     return 0;
+    //   }
+    //   return (self.bAmount * self.decimal) / self.aAmount;
+    // }
       return 0;
   }
   
   get fun balance(jetton: Address): Int { 
-    if (jetton == self.jettonAddressA) {
-            return self.aAmount;
-    } else if (jetton == self.jettonAddressB) {
-            return self.bAmount;
-    }
+    // if (jetton == self.jettonAddressA) {
+    //         return self.aAmount;
+    // } else if (jetton == self.jettonAddressB) {
+    //         return self.bAmount;
+    // }
      return 0;
   }
 }
