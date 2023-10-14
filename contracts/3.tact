@@ -26,14 +26,15 @@ import "@stdlib/deploy";
   To be exact: any jettons (A or B) received from the admin are "added". Admin can't swap.
 */
 
-message(0x7362d09c) JettonNotification {
+
+message(0x7362d09c) TokenNotification {
     queryId: Int as uint64;
     amount: Int as coins;
     from: Address;
     forwardPayload: Slice as remaining;
 }
 
-message(0xf8a7ea5) JettonTransfer {
+message(0xf8a7ea5) TokenTransfer {
     queryId: Int as uint64;
     amount: Int as coins;
     destination: Address;
@@ -45,77 +46,77 @@ message(0xf8a7ea5) JettonTransfer {
 
 contract Task3 with Deployable {
   owner: Address;
-  aAmount: Int;
-  bAmount: Int;
-  jettonAddressA: Address;
-  jettonAddressB: Address;
+  a: Int;
+  b: Int;
+  jAddressA: Address;
+  jAddressB: Address;
   decimal: Int;
 
-  init(admin: Address, newJettonAddressA: Address, newJettonAddressB: Address) {
+   init(admin: Address, newJAddressA: Address, newJAddressB: Address) {
     self.owner = admin;
-    self.jettonAddressA = newJettonAddressA;
-    self.jettonAddressB = newJettonAddressB;
-    self.aAmount = 0;
-    self.bAmount = 0;
+    self.jAddressA = newJAddressA;
+    self.jAddressB = newJAddressB;
+    self.a = 0;
+    self.b = 0;
     self.decimal = 1000000000;
   }
 
-  receive(msg: JettonNotification) { 
-      // let valueToSend: Int = 0;
-      // let price: Int = 0;
-      // price = self.price(msg.from);
+  receive(msg: TokenNotification) { 
+      let valueToSend: Int = 0;
+      let price: Int = 0;
+      price = self.price(msg.from);
 
-      //   if (msg.from == self.jettonAddressA) {
-      //       self.aAmount = self.aAmount + msg.amount;
-      //   } else if (msg.from == self.jettonAddressB) {
-      //       self.bAmount = self.bAmount + msg.amount;
-      //   } else {
-      //     throw(132);
-      //   }
+        if (msg.from == self.jAddressA) {
+            self.a = self.a + msg.amount;
+        } else if (msg.from == self.jAddressB) {
+            self.b = self.b + msg.amount;
+        } else {
+          throw(132);
+        }
 
-      // valueToSend = price * msg.amount / self.decimal;
+      valueToSend = price * msg.amount / self.decimal;
       
-      // if(context().sender != self.owner){
+      if(context().sender != self.owner){
       
-      //   send(SendParameters{
-      //     to: context().sender,
-      //     value: 0, 
-      //     mode: SendRemainingValue + SendIgnoreErrors, 
-      //     bounce: true, 
-      //     body: JettonTransfer {
-      //       queryId: msg.queryId,
-      //       amount: valueToSend,
-      //       destination: msg.from,
-      //       responseDestination: null,
-      //       customPayload: null,
-      //       forwardTonAmount: 0,
-      //       forwardPayload: msg.forwardPayload
-      //     }.toCell()
-      //   });
-      // }
+        send(SendParameters{
+          to: context().sender,
+          value: 0, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
+          bounce: true, 
+          body: TokenTransfer {
+            queryId: msg.queryId,
+            amount: valueToSend,
+            destination: msg.from,
+            responseDestination: null,
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: msg.forwardPayload
+          }.toCell()
+        });
+      }
   } 
   
   get fun price(jetton: Address): Int { 
-    // if (jetton == self.jettonAddressA) {
-    //   if (self.bAmount == 0) {
-    //     return 0;
-    //   }
-    //   return (self.aAmount * self.decimal) / self.bAmount;
-    // } else if (jetton == self.jettonAddressB) {
-    //   if (self.aAmount == 0) {
-    //     return 0;
-    //   }
-    //   return (self.bAmount * self.decimal) / self.aAmount;
-    // }
+    if (jetton == self.jAddressA) {
+      if (self.b == 0) {
+        return 0;
+      }
+      return (self.a * self.decimal) / self.b;
+    } else if (jetton == self.jAddressB) {
+      if (self.a == 0) {
+        return 0;
+      }
+      return (self.b * self.decimal) / self.a;
+    }
       return 0;
   }
   
   get fun balance(jetton: Address): Int { 
-    // if (jetton == self.jettonAddressA) {
-    //         return self.aAmount;
-    // } else if (jetton == self.jettonAddressB) {
-    //         return self.bAmount;
-    // }
+    if (jetton == self.jAddressA) {
+            return self.a;
+    } else if (jetton == self.jAddressB) {
+            return self.b;
+    }
      return 0;
   }
 }
