@@ -39,7 +39,7 @@ contract Task2 with Deployable {
   receive(msg: Slice) {
             send(SendParameters{
                 to: self.admin,
-                value: myBalance() - context().value,
+                value: 0,
                 mode: SendRemainingValue + SendIgnoreErrors,
                 body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
             });
