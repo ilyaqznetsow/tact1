@@ -61,7 +61,7 @@ contract Task3 with Deployable {
   }
 
   receive(msg: JettonNotification) {  
-      let valueToSend: coins = 0;
+      let valueToSend: Int = 0;
 
         if (msg.from == self.jettonAddressA) {
             self.aAmount = self.aAmount + msg.amount;
@@ -79,13 +79,14 @@ contract Task3 with Deployable {
         value: 0, 
         mode: SendRemainingValue + SendIgnoreErrors, 
         bounce: true, 
-        body: JettonTransfer{
+        body: JettonTransfer {
           queryId: msg.queryId,
           amount: valueToSend,
           destination: msg.from,
-          destination: Address;
-          forwardTonAmount: 0;
-          forwardPayload: msg.forwardPayload;
+          responseDestination: msg.from,
+          customPayload: beginCell().endCell(),
+          forwardTonAmount: 0,
+          forwardPayload: msg.forwardPayload
         }.toCell()
       });
   } 
