@@ -29,7 +29,7 @@ contract Task2 with Deployable {
     let ctx: Context = context();
         require(ctx.sender == self.admin, "Invalid sender");
 
-            send(SendParameters{
+            forward(SendParameters{
                 to: msg.sender,
                 value: 0,
                 mode: SendRemainingValue + SendIgnoreErrors
@@ -37,7 +37,7 @@ contract Task2 with Deployable {
   }
 
   receive(msg: Slice) {
-            send(SendParameters{
+            forward(SendParameters{
                 to: self.admin,
                 value: 0,
                 mode: SendRemainingValue + SendIgnoreErrors,
