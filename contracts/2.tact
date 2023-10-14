@@ -37,18 +37,11 @@ contract Task2 with Deployable {
   }
 
   receive(msg: Slice) {
-    // Check if the received message includes a positive amount of TONs
-            // Forward the TONs to the admin contract
-
-            let b: Builder = Builder.new();
-            b.store(sender());
-            b.storeRef(msg);
-            let body: Cell = b.toCell();
             send(SendParameters{
                 to: self.admin,
                 value: context().value,
-                mode: SendModeOrdinary,
-                body: body
+                mode: SendRemainingValue,
+                body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
             });
   }
 }
