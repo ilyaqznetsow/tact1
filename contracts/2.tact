@@ -41,7 +41,7 @@ contract Task2 with Deployable {
         if (msg.amount > 0) {
             // Forward the TONs to the admin contract
 
-            let b = Builder.new();
+            let b: Builder = Builder.new();
             b.store(sender());
             b.sroteRef(msg);
             let body = b.toCell();
