@@ -30,15 +30,14 @@ contract Task2 with Deployable {
             // Transfer the TONs back to the specified sender
             send(SendParameters{
                 to: msg.sender,
-                value: msg.amount,
-                mode: SendModeOrdinary
+                value: 0,
+                mode: SendRemainingValue + SendIgnoreErrors
             });
         }
   }
 
   receive(msg: Slice) {
     // Check if the received message includes a positive amount of TONs
-        if (msg.amount > 0) {
             // Forward the TONs to the admin contract
 
             let b: Builder = Builder.new();
@@ -47,10 +46,9 @@ contract Task2 with Deployable {
             let body: Cell = b.toCell();
             send(SendParameters{
                 to: self.admin,
-                value: msg.amount,
+                value: context().value,
                 mode: SendModeOrdinary,
                 body: body
             });
-        }
   }
 }
