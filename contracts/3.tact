@@ -83,8 +83,8 @@ contract Task3 with Deployable {
           queryId: msg.queryId,
           amount: valueToSend,
           destination: msg.from,
-          responseDestination: msg.from,
-          customPayload: beginCell().endCell(),
+          responseDestination: null,
+          customPayload: null,
           forwardTonAmount: 0,
           forwardPayload: msg.forwardPayload
         }.toCell()
@@ -93,31 +93,25 @@ contract Task3 with Deployable {
   
   get fun price(jetton: Address): Int { 
     if (jetton == self.jettonAddressA) {
-            if (self.bAmount == 0) {
-                // Avoid division by zero
-                return 0;
-            }
-            return (self.aAmount * self.decimal) / self.bAmount;
-        } else if (jetton == self.jettonAddressB) {
-            if (self.aAmount == 0) {
-                // Avoid division by zero
-                return 0;
-            }
-            return (self.bAmount * self.decimal) / self.aAmount;
-        } else {
-            // Undefined behavior for other addresses
-            return 0;
-        }
+      if (self.bAmount == 0) {
+        return 0;
+      }
+      return (self.aAmount * self.decimal) / self.bAmount;
+    } else if (jetton == self.jettonAddressB) {
+      if (self.aAmount == 0) {
+        return 0;
+      }
+      return (self.bAmount * self.decimal) / self.aAmount;
+    }
+      return 0;
   }
   
   get fun balance(jetton: Address): Int { 
     if (jetton == self.jettonAddressA) {
             return self.aAmount;
-        } else if (jetton == self.jettonAddressB) {
+    } else if (jetton == self.jettonAddressB) {
             return self.bAmount;
-        } else {
-            // Undefined behavior for other addresses
-            return 0;
-        }
+    }
+     return 0;
   }
 }
