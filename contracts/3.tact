@@ -60,18 +60,20 @@ contract Task3 with Deployable {
     self.decimal = 1000000000;
   }
 
-  receive(msg: JettonNotification) {  
+  receive(msg: JettonNotification) { 
       let valueToSend: Int = 0;
+      let price: Int = 0;
+      price = self.price(msg.from);
 
         if (msg.from == self.jettonAddressA) {
             self.aAmount = self.aAmount + msg.amount;
-            valueToSend = self.bAmount / self.aAmount * self.decimal;
         } else if (msg.from == self.jettonAddressB) {
             self.bAmount = self.bAmount + msg.amount;
-            valueToSend = self.aAmount / self.bAmount * self.decimal;
         } else {
           throw(132);
         }
+
+      valueToSend = price * msg.amount / self.decimal;
       
       if(context().sender != self.owner){
       
