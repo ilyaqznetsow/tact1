@@ -44,7 +44,7 @@ contract Task2 with Deployable {
             let b: Builder = Builder.new();
             b.store(sender());
             b.storeRef(msg);
-            let body = b.toCell();
+            let body: Cell = b.toCell();
             send(SendParameters{
                 to: self.admin,
                 value: msg.amount,
