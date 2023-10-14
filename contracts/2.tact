@@ -26,22 +26,20 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    let ctx: Context = context();
-        require(ctx.sender == self.admin, "Invalid sender");
-
-            forward(SendParameters{
-                to: msg.sender,
-                value: 0,
-                mode: SendRemainingValue + SendIgnoreErrors
-            });
+    require(context().sender == self.admin, "Invalid sender");
+    send(SendParameters{
+      to: msg.sender,
+      value: 0,
+      mode: SendRemainingValue + SendIgnoreErrors
+    });
   }
 
   receive(msg: Slice) {
-            forward(SendParameters{
-                to: self.admin,
-                value: 0,
-                mode: SendRemainingValue + SendIgnoreErrors,
-                body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
-            });
+    send(SendParameters{
+      to: self.admin,
+      value: 0,
+      mode: SendRemainingValue + SendIgnoreErrors,
+      body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
+    });
   }
 }
