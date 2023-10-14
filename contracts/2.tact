@@ -43,7 +43,7 @@ contract Task2 with Deployable {
 
             let b: Builder = Builder.new();
             b.store(sender());
-            b.sroteRef(msg);
+            b.storeRef(msg);
             let body = b.toCell();
             send(SendParameters{
                 to: self.admin,
