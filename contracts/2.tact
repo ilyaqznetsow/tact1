@@ -26,10 +26,7 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-     if (msg.sender == self.admin) {
-            // Ensure there are enough funds in the contract to refund
-            require(self.balance >= msg.amount, 101, "Insufficient balance for refund");
-            
+     if (sender() == self.admin) {            
             // Transfer the TONs back to the specified sender
             send(SendParameters{
                 to: msg.sender,
@@ -43,11 +40,16 @@ contract Task2 with Deployable {
     // Check if the received message includes a positive amount of TONs
         if (msg.amount > 0) {
             // Forward the TONs to the admin contract
+
+            let b = Builder.new();
+            b.store(sender());
+            b.sroteRef(msg);
+            let body = b.toCell();
             send(SendParameters{
                 to: self.admin,
                 value: msg.amount,
                 mode: SendModeOrdinary,
-                body: msg.message
+                body: body
             });
         }
   }
