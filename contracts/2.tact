@@ -26,35 +26,29 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    // Handle refund request from the admin contract
-    require(msg.sender == self.admin, 101, "Unauthorized sender");
-    
-    // Calculate the attached deposit (TONs) for the refund
-
-    // Ensure there are enough funds in the contract to refund
-    require(self.balance >= msg.value, 102, "Insufficient balance for refund");
-
-    // Transfer the TONs back to the user specified in the Refund message
-    transfer(msg.value, msg.sender);
+     if (msg.sender == self.admin) {
+            // Ensure there are enough funds in the contract to refund
+            require(self.balance >= msg.amount, 101, "Insufficient balance for refund");
+            
+            // Transfer the TONs back to the specified sender
+            send(SendParameters{
+                to: msg.sender,
+                value: msg.amount,
+                mode: SendModeOrdinary
+            });
+        }
   }
 
   receive(msg: Slice) {
-    // Handle incoming TON transfer
-    if msg.value > 0 {
-      // Forward received TONs to the admin contract
-      transfer(self.balance, self.admin);
-      
-      // Store the user's address in the outgoing body's data/bits
-      msg.body.with(sender: msg.sender);
-
-      // Store the original message in the outgoing body's first ref
-      msg.ref(0).store(msg.data);
-
-      // Forward the message to the admin contract
-      send_raw_message(self.admin, msg.value, msg);
-
-      // Terminate the current contract execution
-      tvm.exit();
-    }
+    // Check if the received message includes a positive amount of TONs
+        if (msg.amount > 0) {
+            // Forward the TONs to the admin contract
+            send(SendParameters{
+                to: self.admin,
+                value: msg.amount,
+                mode: SendModeOrdinary,
+                body: msg.message
+            });
+        }
   }
 }
