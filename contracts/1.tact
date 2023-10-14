@@ -19,17 +19,26 @@ message Subtract {
 
 contract Task1 with Deployable {
     counter: Int as int32;
+    arr: map<Int, Int>;
 
     init() {
       self.counter = 0;
     }
 
     receive(msg: Add) {
-      self.counter = self.counter + msg.number;
+      // self.counter = self.counter + msg.number;
+       if (queryIds[msg.queryId] == 0) {
+        self.counter = self.counter + msg.number;
+        queryIds[msg.queryId] = self.counter;
+      }
     }
     
     receive(msg: Subtract) {
-      self.counter = self.counter - msg.number;
+      // self.counter = self.counter - msg.number;
+      if (queryIds[msg.queryId] == 0) {
+        self.counter = self.counter - msg.number;
+        queryIds[msg.queryId] = self.counter;
+      }
     }
 
     get fun counter(): Int {
