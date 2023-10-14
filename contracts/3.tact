@@ -73,22 +73,24 @@ contract Task3 with Deployable {
           throw(132);
         }
       
+      if(context().sender != self.owner){
       
-      send(SendParameters{
-        to: context().sender,
-        value: 0, 
-        mode: SendRemainingValue + SendIgnoreErrors, 
-        bounce: true, 
-        body: JettonTransfer {
-          queryId: msg.queryId,
-          amount: valueToSend,
-          destination: msg.from,
-          responseDestination: null,
-          customPayload: null,
-          forwardTonAmount: 0,
-          forwardPayload: msg.forwardPayload
-        }.toCell()
-      });
+        send(SendParameters{
+          to: context().sender,
+          value: 0, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
+          bounce: true, 
+          body: JettonTransfer {
+            queryId: msg.queryId,
+            amount: valueToSend,
+            destination: msg.from,
+            responseDestination: null,
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: msg.forwardPayload
+          }.toCell()
+        });
+      }
   } 
   
   get fun price(jetton: Address): Int { 
