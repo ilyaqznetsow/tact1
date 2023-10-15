@@ -127,12 +127,12 @@ contract Task3 with Deployable {
       if (self.b == 0) {
         return 0;
       }
-      return (self.a * self.decimal) / self.b;
+      return (self.b * self.decimal) / self.a;
     } else if (jetton == self.jAddressB) {
       if (self.a == 0) {
         return 0;
       }
-      return (self.b * self.decimal) / self.a;
+      return (self.a * self.decimal) / self.b;
     }
       return 0;
   }
