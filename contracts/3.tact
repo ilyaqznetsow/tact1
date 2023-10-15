@@ -87,8 +87,8 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: context().sender,
           value: 0, 
-          mode: SendRemainingValue + SendIgnoreErrors, 
-          bounce: true, 
+          mode: SendIgnoreErrors, 
+          bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: msg.amount,
@@ -107,13 +107,13 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: context().sender,
           value: 0, 
-          mode: SendRemainingValue + SendIgnoreErrors, 
-          bounce: true, 
+          mode: SendIgnoreErrors, 
+          bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: valueToSend,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: context().sender,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
