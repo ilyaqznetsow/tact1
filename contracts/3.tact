@@ -51,18 +51,18 @@ message(0xf8a7ea5) TokenTransfer {
 
 contract Task3 with Deployable {
   owner: Address;
-  a: Int;
-  b: Int;
-  jAddressA: Address;
-  jAddressB: Address;
+  aAmount: Int;
+  bAmount: Int;
+  jettonAddressA: Address;
+  jettonAddressB: Address;
   decimal: Int;
 
-   init(admin: Address, newJAddressA: Address, newJAddressB: Address) {
+  init(admin: Address, newJettonAddressA: Address, newJettonAddressB: Address) {
     self.owner = admin;
-    self.jAddressA = newJAddressA;
-    self.jAddressB = newJAddressB;
-    self.a = 0;
-    self.b = 0;
+    self.jettonAddressA = newJettonAddressA;
+    self.jettonAddressB = newJettonAddressB;
+    self.aAmount = 0;
+    self.bAmount = 0;
     self.decimal = 1000000000;
   }
 
@@ -70,10 +70,11 @@ contract Task3 with Deployable {
     let jettonContract: Address = sender();
 
     if(msg.from == self.owner){
-      if(jettonContract == self.jAddressA){
-        self.a = self.a + msg.amount;
-      } else if(jettonContract == self.jAddressB){
-        self.b = self.b + msg.amount;
+      if(jettonContract == self.jettonAddressA){
+        self.aAmount= self.aAmount + msg.amount;
+      } else
+      if(jettonContract == self.jettonAddressB){
+        self.bAmount = self.bAmount + msg.amount;
       }
       return;
     }
@@ -81,17 +82,17 @@ contract Task3 with Deployable {
       let amount_out: Int = 0;
       let sendBack: Bool = false;
 
-      if (jettonContract == self.jAddressA) {            
-        amount_out = (self.b * self.decimal / self.a) * msg.amount / self.decimal;
-        sendBack = self.b < amount_out;
+      if (jettonContract == self.jettonAddressA) {            
+        amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+        sendBack = self.bAmount < amount_out;
       }
         
-      if (jettonContract == self.jAddressB) {   
-        amount_out = (self.a * self.decimal / self.b) * msg.amount / self.decimal;
-        sendBack = self.a < amount_out;
+      if (jettonContract == self.jettonAddressB) {   
+        amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+        sendBack = self.aAmount < amount_out;
       }
 
-      if (jettonContract != self.jAddressA && jettonContract != self.jAddressB){
+      if (jettonContract != self.jettonAddressA && jettonContract != self.jettonAddressB){
         sendBack = true;
       }
 
@@ -128,36 +129,35 @@ contract Task3 with Deployable {
           }.toCell()
         });
 
-         if (jettonContract == self.jAddressA) {
-          self.a = self.a - amount_out;
-          self.b = self.b + msg.amount;
+         if (jettonContract != self.jettonAddressA) {
+          self.aAmount= self.aAmount - amount_out;
+          self.bAmount = self.bAmount + msg.amount;
         } else {
-          self.b = self.b - amount_out;
-          self.a = self.a + msg.amount;
+          self.bAmount = self.bAmount - amount_out;
+          self.aAmount= self.aAmount + msg.amount;
         }
   } 
   
   get fun price(jetton: Address): Int {
-
-    if (jetton == self.jAddressA) {
-      require(self.b > 0, "Not enough jettons A");
-      return (self.a * self.decimal) / self.b;
+    if (jetton == self.jettonAddressA) {
+      // require(self.bAmount > 0, "Not enough jettons A");
+      return (self.aAmount * self.decimal) / self.bAmount;
     }
     
-    if (jetton == self.jAddressB) {
-      require(self.a > 0, "Not enough jettons B");
-      return (self.b * self.decimal) / self.a;
+    if (jetton == self.jettonAddressB) {
+      // require(self.aAmount> 0, "Not enough jettons B");
+      return (self.bAmount * self.decimal) / self.aAmount;
     }
 
     return 0;
   }
   
   get fun balance(jetton: Address): Int { 
-    if (jetton == self.jAddressA) {
-      return self.a * self.decimal;
+    if (jetton == self.jettonAddressA) {
+      return self.aAmount * self.decimal;
     } 
-    if (jetton == self.jAddressB) {
-      return self.b * self.decimal;
+    if (jetton == self.jettonAddressB) {
+      return self.bAmount * self.decimal;
     }
     
     return 0;
