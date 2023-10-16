@@ -86,7 +86,6 @@ contract Task3 with Deployable {
 
       let amount_out: Int = 0;
       let sendBack: Bool = false;
-      let t: Int = 0;
 
       if (jettonContract == self.jettonAddressA) {            
         amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
@@ -106,13 +105,13 @@ contract Task3 with Deployable {
         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
-          jettonContract = self.jettonAddressA;
+          // jettonContract = self.jettonAddressA;
         }
         
         if (jettonContract == self.jettonAddressA) {
           self.bAmount = self.bAmount - amount_out;
           self.aAmount= self.aAmount + msg.amount;
-          jettonContract = self.jettonAddressB;
+          // jettonContract = self.jettonAddressB;
         }
       }
 
