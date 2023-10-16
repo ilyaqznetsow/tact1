@@ -69,7 +69,7 @@ contract Task4 with Deployable {
         body: Transfer{
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
+          responseDestination: msg.prevOwner, 
           customPayload: null, 
           forwardAmount: 0,
           forwardPayload: msg.forwardPayload 
@@ -78,9 +78,9 @@ contract Task4 with Deployable {
       return;
     }
 
-    self.lockedNft = msg.prevOwner;
-    self.nftOwner = sender();
-    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    self.lockedNft = sender();
+    self.nftOwner = msg.prevOwner; 
+    self.lockedUntil = msg.forwardPayload.loadUint(32);
   }
 
   receive(msg: NftWithdrawal) {
@@ -90,12 +90,7 @@ contract Task4 with Deployable {
 
     if (now() < self.lockedUntil) {
       // Send a message back to the sender with the comment "NFT is still locked"
-      send(SendParameters {
-        to: sender(),
-        value: 0,
-        mode: SendIgnoreErrors,
-        body: "NFT is still locked".asComment()
-      });
+      self.reply("NFT is still locked".asComment());
       return;
     }
 
@@ -120,10 +115,7 @@ contract Task4 with Deployable {
   }
 
   get fun time(): Int {
-    if (now() >= self.lockedUntil) {
-      return 0;
-    }
-    return self.lockedUntil - now();
+    return self.lockedUntil;
   }
 
   get fun nft(): Address? {
