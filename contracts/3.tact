@@ -105,8 +105,8 @@ contract Task3 with Deployable {
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_in,
-            destination: msg.from,
-            responseDestination: sender(),
+            destination: sender(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
@@ -115,20 +115,28 @@ contract Task3 with Deployable {
       }
       else {            
         send(SendParameters{
-          to: sender(),
+          to: msg.from,
           value: 0, 
           mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
-            destination: msg.from,
+            destination: sender(),
             responseDestination: sender(),
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
+
+        if (msg.from == self.jAddressA) {
+          self.a = self.a - amount_out;
+          self.b = self.b + amount_in;
+        } else if (msg.from == self.jAddressB) {
+          self.b = self.b - amount_out;
+          self.a = self.a + amount_in;
+        }
       }
   } 
   
