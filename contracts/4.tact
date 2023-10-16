@@ -69,9 +69,9 @@ contract Task4 with Deployable {
         body: Transfer{
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
-          responseDestination: msg.prevOwner, 
+          responseDestination: myAddress(), 
           customPayload: null, 
-          forwardAmount: 0,
+          forwardAmount: ton("0.02"),
           forwardPayload: msg.forwardPayload 
         }.toCell()
       });
@@ -97,8 +97,8 @@ contract Task4 with Deployable {
     // Send the locked NFT back to the owner with all the remaining TON balance
     send(SendParameters {
       to: self.lockedNft!!,
-      value: 0,
-      mode: 64,
+      value: ton("0.02"),
+      mode: 0,
       body: Transfer{
           queryId: msg.queryId,            
           newOwner: self.nftOwner!!, 
