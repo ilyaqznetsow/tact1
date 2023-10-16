@@ -67,9 +67,8 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    let jettonContract: Address = sender();
-
-    require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
+    let ctx: Context = context();
+    let jettonContract: Address = ctx.sender;
 
     if(msg.from == self.owner){
       
@@ -83,6 +82,8 @@ contract Task3 with Deployable {
 
       return;
     }
+
+      require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
 
       let amount_out: Int = 0;
       let sendBack: Bool = false;
@@ -105,11 +106,11 @@ contract Task3 with Deployable {
       }
       else
       {
-        if (sendTo == self.jettonAddressB) {
+        if (jettonContract == self.jettonAddressB) {
           sendTo = self.jettonAddressA;
         }
         
-        if (sendTo == self.jettonAddressA) {
+        if (jettonContract == self.jettonAddressA) {
           sendTo = self.jettonAddressB;
         }
       }
