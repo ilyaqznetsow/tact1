@@ -99,22 +99,19 @@ contract Task3 with Deployable {
       }
 
       if(sendBack){
-        send(SendParameters{
-          to: jettonContract,
-          value: 0, 
-          mode: 64, 
-          body: TokenTransfer {
-            queryId: msg.queryId,
-            amount: msg.amount,
-            destination: msg.from,
-            responseDestination: myAddress(),
-            customPayload: null,
-            forwardTonAmount: ton("0.01"),
-            forwardPayload: msg.forwardPayload
-          }.toCell()
-        });
-        return;
+        amount_out = msg.amount;
+      }else{
+        if (jettonContract == self.jettonAddressB) {
+          self.aAmount= self.aAmount - amount_out;
+          self.bAmount = self.bAmount + msg.amount;
+        }
+        
+        if (jettonContract == self.jettonAddressA) {
+          self.bAmount = self.bAmount - amount_out;
+          self.aAmount= self.aAmount + msg.amount;
+        }
       }
+
         send(SendParameters{
           to: jettonContract,
           value: 0,
@@ -130,25 +127,15 @@ contract Task3 with Deployable {
           }.toCell()
         });
 
-         if (jettonContract == self.jettonAddressB) {
-          self.aAmount= self.aAmount - amount_out;
-          self.bAmount = self.bAmount + msg.amount;
-        }
         
-        if (jettonContract == self.jettonAddressA) {
-          self.bAmount = self.bAmount - amount_out;
-          self.aAmount= self.aAmount + msg.amount;
-        }
   } 
   
   get fun price(jetton: Address): Int {
-    if (jetton == self.jettonAddressB) {
-      // require(self.bAmount > 0, "Not enough jettons A");
+    if (jetton == self.jettonAddressA) {
       return (self.aAmount * self.decimal) / self.bAmount;
     }
     
-    if (jetton == self.jettonAddressA) {
-      // require(self.aAmount> 0, "Not enough jettons B");
+    if (jetton == self.jettonAddressB) {
       return (self.bAmount * self.decimal) / self.aAmount;
     }
 
