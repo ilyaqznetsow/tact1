@@ -128,10 +128,12 @@ contract Task3 with Deployable {
   get fun price(jetton: Address): Int { 
     if (jetton == self.jAddressA) {
       require(self.a > 0, "Not enough jettons A");
-      return (self.b * self.decimal) / self.a;
-    } else if (jetton == self.jAddressB) {
-      require(self.b > 0, "Not enough jettons B");
       return (self.a * self.decimal) / self.b;
+    }
+    
+    if (jetton == self.jAddressB) {
+      require(self.b > 0, "Not enough jettons B");
+      return (self.b * self.decimal) / self.a;
     }
     return 0;
   }
