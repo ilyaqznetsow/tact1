@@ -87,33 +87,33 @@ contract Task3 with Deployable {
 
       if (msg.from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = !(self.b >= amount_out);
+        // sendBack = !(self.b >= amount_out);
       }
         
       if (msg.from == self.jAddressB) {            
         amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = !(self.a >= amount_out);
+        // sendBack = !(self.a >= amount_out);
       }
 
 
-      if(sendBack){
-        send(SendParameters{
-          to: sender(),
-          value: ton("0.1"), 
-          mode: 0, 
-          bounce: false, 
-          body: TokenTransfer {
-            queryId: msg.queryId,
-            amount: amount_in,
-            destination: sender(),
-            responseDestination: myAddress(),
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: msg.forwardPayload
-          }.toCell()
-        });
-      }
-      else {            
+      // if(sendBack){
+      //   send(SendParameters{
+      //     to: msg.from,
+      //     value: ton("0.1"), 
+      //     mode: 0, 
+      //     bounce: false, 
+      //     body: TokenTransfer {
+      //       queryId: msg.queryId,
+      //       amount: amount_in,
+      //       destination: sender(),
+      //       responseDestination: sender(),
+      //       customPayload: null,
+      //       forwardTonAmount: ton("0.01"),
+      //       forwardPayload: msg.forwardPayload
+      //     }.toCell()
+      //   });
+      // }
+      // else {            
         send(SendParameters{
           to: msg.from,
           value: ton("0.1"), 
@@ -123,7 +123,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_out,
             destination: sender(),
-            responseDestination: myAddress(),
+            responseDestination: sender(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
@@ -137,10 +137,12 @@ contract Task3 with Deployable {
           self.b = self.b - amount_out;
           self.a = self.a + amount_in;
         }
-      }
+      // }
   } 
   
-  get fun price(jetton: Address): Int { 
+  get fun price(jetton: Address): Int {
+    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
+
     if (jetton == self.jAddressA) {
       require(self.b > 0, "Not enough jettons A");
       return (self.a * self.decimal) / self.b;
