@@ -131,14 +131,18 @@ contract Task3 with Deployable {
           }.toCell()
         });
 
-        if (jettonContract == self.jettonAddressB) {
-          self.aAmount= self.aAmount - amount_out;
+        if(sendBack){
+          return;
+        }
+
+        if (sendTo == self.jettonAddressB) {
+          self.aAmount = self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
         }
         
-        if (jettonContract == self.jettonAddressA) {
+        if (sendTo == self.jettonAddressA) {
           self.bAmount = self.bAmount - amount_out;
-          self.aAmount= self.aAmount + msg.amount;
+          self.aAmount = self.aAmount + msg.amount;
         }
   } 
   
