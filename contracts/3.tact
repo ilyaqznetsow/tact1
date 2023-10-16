@@ -86,29 +86,28 @@ contract Task3 with Deployable {
       let amount_in: Int = msg.amount;
       let amount_left: Int = 0;
       let sendBack: Bool = false;
-      //b = 2 a = 10 amount_in = 10
+
       if (from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = self.b <= amount_out / self.decimal;
+        sendBack = self.b < amount_out / self.decimal;
       }
         
       if (from == self.jAddressB) {   
-        //message from b
         amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = self.a <= amount_out / self.decimal;
+        sendBack = self.a < amount_out / self.decimal;
       }
 
 
       if(sendBack){
         send(SendParameters{
-          to: from,
+          to: msg.from,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_in,
-            destination: msg.from,
+            destination: from,
             responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
@@ -119,14 +118,14 @@ contract Task3 with Deployable {
       }
       else {            
         send(SendParameters{
-          to: from,
+          to: msg.from,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
-            destination: msg.from,
+            destination: from,
             responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
