@@ -100,15 +100,15 @@ contract Task3 with Deployable {
 
       if(sendBack){
         send(SendParameters{
-          to: msg.from,
+          to: from,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_in,
-            destination: from,
-            responseDestination: myAddress(),
+            destination: msg.from,
+            responseDestination: null,
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
@@ -116,24 +116,24 @@ contract Task3 with Deployable {
         });
         return;
       }
-      else {            
+      else {       
         send(SendParameters{
-          to: msg.from,
+          to: from,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
-            destination: from,
-            responseDestination: myAddress(),
+            destination: msg.from,
+            responseDestination: null,
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
 
-        if (from == self.jAddressA) {
+         if (from == self.jAddressA) {
           self.a = self.a - amount_out;
           self.b = self.b + amount_in;
         } else {
