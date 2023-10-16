@@ -103,11 +103,10 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: jettonContract,
           value: 0, 
-          mode: SendRemainingValue, 
-          bounce: true, 
+          mode: 64, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: amount_in * self.decimal,
+            amount: msg.amount,
             destination: msg.from,
             responseDestination: myAddress(),
             customPayload: null,
@@ -121,11 +120,10 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: jettonContract,
           value: 0, 
-          mode: SendRemainingValue, 
-          bounce: true, 
+          mode: 64, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: amount_ou * self.decimal,
+            amount: amount_out,
             destination: msg.from,
             responseDestination: myAddress(),
             customPayload: null,
