@@ -68,18 +68,18 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) {
     let allowed: Bool = false;
-    let from: Address = sender();
+    let jettonContract: Address = sender();
 
     if(msg.from == self.owner){
-      if(from == self.jAddressA){
+      if(jettonContract == self.jAddressA){
         self.a = self.a + msg.amount;
-      } else if(from == self.jAddressB){
+      } else if(jettonContract == self.jAddressB){
         self.b = self.b + msg.amount;
       }
       return;
     }
 
-    allowed = from == self.jAddressA || from == self.jAddressB;
+    allowed = jettonContract == self.jAddressA || jettonContract == self.jAddressB;
     require(allowed, "Not allowed to add jettons");
 
       let amount_out: Int = 0;
@@ -87,12 +87,12 @@ contract Task3 with Deployable {
       let amount_left: Int = 0;
       let sendBack: Bool = false;
 
-      if (from == self.jAddressA) {            
+      if (jettonContract == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in / self.decimal;
         sendBack = self.b < amount_out;
       }
         
-      if (from == self.jAddressB) {   
+      if (jettonContract == self.jAddressB) {   
         amount_out = self.price(self.jAddressA) * amount_in / self.decimal;
         sendBack = self.a < amount_out;
       }
@@ -101,13 +101,13 @@ contract Task3 with Deployable {
 
       if(sendBack){
         send(SendParameters{
-          to: from,
+          to: jettonContract,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: true, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: amount_in,
+            amount: amount_in * self.decimal,
             destination: msg.from,
             responseDestination: myAddress(),
             customPayload: null,
@@ -119,13 +119,13 @@ contract Task3 with Deployable {
       }
       else {       
         send(SendParameters{
-          to: from,
+          to: jettonContract,
           value: 0, 
           mode: SendRemainingValue, 
           bounce: true, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: amount_out,
+            amount: amount_ou * self.decimal,
             destination: msg.from,
             responseDestination: myAddress(),
             customPayload: null,
@@ -134,7 +134,7 @@ contract Task3 with Deployable {
           }.toCell()
         });
 
-         if (from == self.jAddressA) {
+         if (jettonContract == self.jAddressA) {
           self.a = self.a - amount_out;
           self.b = self.b + amount_in;
         } else {
