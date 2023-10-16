@@ -97,6 +97,7 @@ contract Task3 with Deployable {
         sendBack = self.a < amount_out / self.decimal;
       }
 
+      require(amount_out> 0, "Not enough jettons");
 
       if(sendBack){
         send(SendParameters{
@@ -108,7 +109,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_in,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
@@ -126,7 +127,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_out,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
@@ -144,15 +145,15 @@ contract Task3 with Deployable {
   } 
   
   get fun price(jetton: Address): Int {
-    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
+    // require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
 
     if (jetton == self.jAddressA) {
-      require(self.b > 0, "Not enough jettons A");
+      // require(self.b > 0, "Not enough jettons A");
       return (self.a * self.decimal) / self.b;
     }
     
     if (jetton == self.jAddressB) {
-      require(self.a > 0, "Not enough jettons B");
+      // require(self.a > 0, "Not enough jettons B");
       return (self.b * self.decimal) / self.a;
     }
     return 0;
