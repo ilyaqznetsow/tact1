@@ -89,12 +89,12 @@ contract Task3 with Deployable {
 
       if (from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = self.b < amount_out;
+        sendBack = self.b < amount_out / self.decimal;
       }
         
       if (from == self.jAddressB) {            
         amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = self.a < amount_out;
+        sendBack = self.a < amount_out / self.decimal;
       }
 
 
@@ -108,7 +108,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_in,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: null,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
@@ -126,7 +126,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_out,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: null,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
