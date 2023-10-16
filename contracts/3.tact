@@ -108,14 +108,10 @@ contract Task3 with Deployable {
         require(amount_out > 0, "Not enough jettons");
 
         if (jettonContract == self.jettonAddressB) {
-          self.aAmount= self.aAmount - amount_out;
-          self.bAmount = self.bAmount + msg.amount;
           sendTo = self.jettonAddressA;
         }
         
         if (jettonContract == self.jettonAddressA) {
-          self.bAmount = self.bAmount - amount_out;
-          self.aAmount= self.aAmount + msg.amount;
           sendTo = self.jettonAddressB;
         }
       }
@@ -134,6 +130,16 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
+
+        if (jettonContract == self.jettonAddressB) {
+          self.aAmount= self.aAmount - amount_out;
+          self.bAmount = self.bAmount + msg.amount;
+        }
+        
+        if (jettonContract == self.jettonAddressA) {
+          self.bAmount = self.bAmount - amount_out;
+          self.aAmount= self.aAmount + msg.amount;
+        }
   } 
   
   get fun price(jetton: Address): Int {
