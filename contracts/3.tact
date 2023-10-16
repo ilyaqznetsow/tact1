@@ -67,7 +67,6 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    let allowed: Bool = false;
     let jettonContract: Address = sender();
 
     if(msg.from == self.owner){
@@ -79,25 +78,23 @@ contract Task3 with Deployable {
       return;
     }
 
-    allowed = jettonContract == self.jAddressA || jettonContract == self.jAddressB;
-    require(allowed, "Not allowed to add jettons");
-
       let amount_out: Int = 0;
-      let amount_in: Int = msg.amount;
-      let amount_left: Int = 0;
       let sendBack: Bool = false;
 
       if (jettonContract == self.jAddressA) {            
-        amount_out = self.price(self.jAddressB) * amount_in / self.decimal;
+        amount_out = (self.b * self.decimal / self.a) * msg.amount / self.decimal;
         sendBack = self.b < amount_out;
       }
         
       if (jettonContract == self.jAddressB) {   
-        amount_out = self.price(self.jAddressA) * amount_in / self.decimal;
+        amount_out = (self.a * self.decimal / self.b) * msg.amount / self.decimal;
         sendBack = self.a < amount_out;
       }
 
-      require(amount_out> 0, "Not enough jettons");
+      if (jettonContract != self.jAddressA && jettonContract != self.jAddressB){
+        sendBack = true;
+      }
+
 
       if(sendBack){
         send(SendParameters{
@@ -111,15 +108,13 @@ contract Task3 with Deployable {
             responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
-            forwardPayload: msg.forwardPayload
           }.toCell()
         });
         return;
       }
-      else {       
         send(SendParameters{
           to: sender(),
-          value: 0, 
+          value: 0,
           mode: 64, 
           body: TokenTransfer {
             queryId: msg.queryId,
@@ -128,7 +123,6 @@ contract Task3 with Deployable {
             responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
-            forwardPayload: msg.forwardPayload
           }.toCell()
         });
 
@@ -139,11 +133,9 @@ contract Task3 with Deployable {
           self.b = self.b - amount_out;
           self.a = self.a + amount_in;
         }
-      }
   } 
   
   get fun price(jetton: Address): Int {
-    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
 
     if (jetton == self.jAddressA) {
       require(self.b > 0, "Not enough jettons A");
@@ -159,8 +151,6 @@ contract Task3 with Deployable {
   }
   
   get fun balance(jetton: Address): Int { 
-    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
-
     if (jetton == self.jAddressA) {
       return self.a * self.decimal;
     } 
