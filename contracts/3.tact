@@ -97,7 +97,7 @@ contract Task3 with Deployable {
         sendBack = self.aAmount < amount_out;
       }
 
-      let sendTo: Address? = null;
+      let sendTo: Address = jettonContract;
       if(sendBack){
         amount_out = msg.amount;
       }
@@ -117,7 +117,7 @@ contract Task3 with Deployable {
       }
 
         send(SendParameters{
-          to: sendTo!!,
+          to: sendTo,
           value: 0,
           mode: 64, 
           body: TokenTransfer {
