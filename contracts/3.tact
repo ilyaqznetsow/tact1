@@ -87,12 +87,14 @@ contract Task3 with Deployable {
       let amount_out: Int = 0;
       let sendBack: Bool = false;
 
-      if (jettonContract == self.jettonAddressA) {            
+      if (jettonContract == self.jettonAddressA) {
+        require(self.aAmount > 0, "Not enough jettons");
         amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
         sendBack = self.bAmount < amount_out;
       }
         
       if (jettonContract == self.jettonAddressB) {   
+        require(self.bAmount > 0, "Not enough jettons");
         amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
         sendBack = self.aAmount < amount_out;
       }
@@ -103,6 +105,8 @@ contract Task3 with Deployable {
       }
       else
       {
+        require(amount_out > 0, "Not enough jettons");
+
         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
@@ -130,8 +134,6 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-
-        
   } 
   
   get fun price(jetton: Address): Int {
