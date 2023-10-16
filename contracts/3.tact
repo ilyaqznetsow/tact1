@@ -69,14 +69,17 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) { 
       let valueToSend: Int = 0;
       let sendBack: Bool = false;
-
-      valueToSend = (self.a * self.decimal / self.b) * msg.amount / self.decimal;
+      let jAddress: Address = msg.from;
 
         if (msg.from == self.jAddressA) {
             self.a = self.a + msg.amount;
+            
+            valueToSend = self.price(self.jAddressA) * msg.amount / self.decimal;
             sendBack = self.b < valueToSend;
         } else if (msg.from == self.jAddressB) {
             self.b = self.b + msg.amount;
+            
+            valueToSend = self.price(self.jAddressB) * msg.amount / self.decimal;
             sendBack = self.a < valueToSend;
         } else {
           throw(132);
@@ -87,7 +90,7 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: context().sender,
           value: 0, 
-          mode: SendIgnoreErrors, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
@@ -105,9 +108,9 @@ contract Task3 with Deployable {
       if(context().sender != self.owner){
       
         send(SendParameters{
-          to: context().sender,
+          to: jAddress,
           value: 0, 
-          mode: SendIgnoreErrors, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
@@ -139,9 +142,10 @@ contract Task3 with Deployable {
   
   get fun balance(jetton: Address): Int { 
     if (jetton == self.jAddressA) {
-            return self.a;
-    } else if (jetton == self.jAddressB) {
-            return self.b;
+      return self.a;
+    } 
+    if (jetton == self.jAddressB) {
+      return self.b;
     }
      return 0;
   }
