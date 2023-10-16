@@ -48,26 +48,89 @@ message NftWithdrawal {
 
 contract Task4 with Deployable {
   seed: Int as uint128;
-  
+  lockedUntil: Int as uint32;
+  lockedNft: Address?;
+  nftOwner: Address?;
+
   init(seed: Int) {
-    self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
+    self.seed = seed;
+    self.lockedUntil = 0;
+    self.lockedNft = null;
+    self.nftOwner = null;
   }
 
   receive(msg: OwnershipAssigned) {
+    if (self.lockedNft != null) {
+      // Return the NFT back to the sender if the contract already holds an NFT
+      send(SendParameters {
+        to: sender(),
+        value: 0,
+        mode: 64,
+        body: Transfer{
+          queryId: msg.queryId,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: msg.forwardPayload 
+        }.toCell()
+      });
+      return;
+    }
+
+    self.lockedNft = msg.prevOwner;
+    self.nftOwner = sender();
+    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
   }
 
   receive(msg: NftWithdrawal) {
+    require(msg.nftAddress != self.lockedNft, "Invalid NFT address");
+
+    require(sender() != self.nftOwner,"Invalid sender");
+
+    if (now() < self.lockedUntil) {
+      // Send a message back to the sender with the comment "NFT is still locked"
+      send(SendParameters {
+        to: sender(),
+        value: 0,
+        mode: SendIgnoreErrors,
+        body: "NFT is still locked".asComment()
+      });
+      return;
+    }
+
+    // Send the locked NFT back to the owner with all the remaining TON balance
+    send(SendParameters {
+      to: self.lockedNft!!,
+      value: 0,
+      mode: 64,
+      body: Transfer{
+          queryId: msg.queryId,            
+          newOwner: self.nftOwner!!, 
+          responseDestination: self.nftOwner!!, 
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: emptySlice()
+        }.toCell()
+    });
+
+    self.lockedNft = null;
+    self.nftOwner = null;
+    self.lockedUntil = 0;
   }
 
   get fun time(): Int {
-    return 0;
+    if (now() >= self.lockedUntil) {
+      return 0;
+    }
+    return self.lockedUntil - now();
   }
 
   get fun nft(): Address? {
-    return null;
+    return self.lockedNft;
   }
 
   get fun owner(): Address? {
-    return null;
+    return self.nftOwner;
   }
 }
