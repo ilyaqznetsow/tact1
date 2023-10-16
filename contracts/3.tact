@@ -68,13 +68,14 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) {
     let allowed: Bool = false;
-    allowed = msg.from == self.jAddressA || msg.from == self.jAddressB;
+    let from: Address = sender();
+    allowed = from == self.jAddressA || from == self.jAddressB;
     require(allowed, "Not allowed to add jettons");
 
-    if(sender() == self.owner){
-      if(msg.from == self.jAddressA){
+    if(msg.from == self.owner){
+      if(from == self.jAddressA){
         self.a = self.a + msg.amount;
-      } else if(msg.from == self.jAddressB){
+      } else if(from == self.jAddressB){
         self.b = self.b + msg.amount;
       }
       return;
@@ -85,12 +86,12 @@ contract Task3 with Deployable {
       let amount_left: Int = 0;
       let sendBack: Bool = true;
 
-      if (msg.from == self.jAddressA) {            
+      if (from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
         // sendBack = !(self.b >= amount_out);
       }
         
-      if (msg.from == self.jAddressB) {            
+      if (from == self.jAddressB) {            
         amount_out = self.price(self.jAddressA) * amount_in;
         // sendBack = !(self.a >= amount_out);
       }
@@ -115,25 +116,25 @@ contract Task3 with Deployable {
       // }
       // else {            
         send(SendParameters{
-          to: msg.from,
+          to: from,
           value: ton("0.1"), 
           mode: 0, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
-            destination: sender(),
-            responseDestination: sender(),
+            destination: msg.from,
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
 
-        if (msg.from == self.jAddressA) {
+        if (from == self.jAddressA) {
           self.a = self.a - amount_out;
           self.b = self.b + amount_in;
-        } else if (msg.from == self.jAddressB) {
+        } else {
           self.b = self.b - amount_out;
           self.a = self.a + amount_in;
         }
