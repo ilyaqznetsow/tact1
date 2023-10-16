@@ -80,18 +80,19 @@ contract Task3 with Deployable {
       return;
     }
 
-      let valueToSend: Int = 0;
-
+      let amount_out: Int = 0;
+      let amount_in: Int = msg.amount;
+      let amount_left: Int = 0;
       let sendBack: Bool = true;
 
       if (msg.from == self.jAddressA) {            
-        valueToSend = self.price(self.jAddressB) * msg.amount;
-        sendBack = !(self.b >= valueToSend);
+        amount_out = self.price(self.jAddressB) * amount_in;
+        sendBack = !(self.b >= amount_out);
       }
         
       if (msg.from == self.jAddressB) {            
-        valueToSend = self.price(self.jAddressA) * msg.amount;
-        sendBack = !(self.a >= valueToSend);
+        amount_out = self.price(self.jAddressA) * amount_in;
+        sendBack = !(self.a >= amount_out);
       }
 
 
@@ -103,7 +104,7 @@ contract Task3 with Deployable {
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: msg.amount,
+            amount: amount_in,
             destination: msg.from,
             responseDestination: sender(),
             customPayload: null,
@@ -114,13 +115,13 @@ contract Task3 with Deployable {
       }
       else {            
         send(SendParameters{
-          to: msg.from,
+          to: sender(),
           value: 0, 
           mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
-            amount: valueToSend,
+            amount: amount_out,
             destination: msg.from,
             responseDestination: sender(),
             customPayload: null,
