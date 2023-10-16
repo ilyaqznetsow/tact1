@@ -86,15 +86,16 @@ contract Task3 with Deployable {
       let amount_in: Int = msg.amount;
       let amount_left: Int = 0;
       let sendBack: Bool = false;
-
+      //b = 2 a = 10 amount_in = 10
       if (from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = self.b < amount_out / self.decimal;
+        sendBack = self.b <= amount_out / self.decimal;
       }
         
-      if (from == self.jAddressB) {            
+      if (from == self.jAddressB) {   
+        //message from b
         amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = self.a < amount_out / self.decimal;
+        sendBack = self.a <= amount_out / self.decimal;
       }
 
 
