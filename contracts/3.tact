@@ -69,7 +69,7 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     let jettonContract: Address = sender();
 
-    if(msg.from == self.owner){
+    if(sender() == self.owner){
       if(jettonContract == self.jettonAddressA){
         self.aAmount= self.aAmount + msg.amount;
       } else
