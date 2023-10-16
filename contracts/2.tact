@@ -26,7 +26,7 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    nativeThrowUnless(132, context().sender == self.admin);
+    require(sender() == self.admin, "Invalid sender");
     send(SendParameters{
       to: msg.sender,
       value: 0,
