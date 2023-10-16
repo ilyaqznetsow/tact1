@@ -80,7 +80,7 @@ contract Task4 with Deployable {
 
     self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
-    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    self.lockedUntil = msg.forwardPayload.loadUint(32);
   }
 
   receive(msg: NftWithdrawal) {
