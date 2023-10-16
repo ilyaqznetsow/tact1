@@ -69,18 +69,23 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     let jettonContract: Address = sender();
 
-    if(sender() == self.owner){
+    if(msg.from == self.owner){
       if(jettonContract == self.jettonAddressA){
-        self.aAmount= self.aAmount + msg.amount;
-      } else
+        self.aAmount = self.aAmount + msg.amount;
+      }
+
       if(jettonContract == self.jettonAddressB){
         self.bAmount = self.bAmount + msg.amount;
       }
+
       return;
     }
 
       let amount_out: Int = 0;
       let sendBack: Bool = false;
+
+      sendBack = jettonContract != self.jettonAddressA && jettonContract != self.jettonAddressB;
+
 
       if (jettonContract == self.jettonAddressA) {            
         amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
@@ -92,14 +97,9 @@ contract Task3 with Deployable {
         sendBack = self.aAmount < amount_out;
       }
 
-      if (jettonContract != self.jettonAddressA && jettonContract != self.jettonAddressB){
-        sendBack = true;
-      }
-
-
       if(sendBack){
         send(SendParameters{
-          to: sender(),
+          to: jettonContract,
           value: 0, 
           mode: 64, 
           body: TokenTransfer {
@@ -115,7 +115,7 @@ contract Task3 with Deployable {
         return;
       }
         send(SendParameters{
-          to: sender(),
+          to: jettonContract,
           value: 0,
           mode: 64, 
           body: TokenTransfer {
@@ -129,10 +129,12 @@ contract Task3 with Deployable {
           }.toCell()
         });
 
-         if (jettonContract != self.jettonAddressA) {
+         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
-        } else {
+        }
+        
+        if (jettonContract == self.jettonAddressA) {
           self.bAmount = self.bAmount - amount_out;
           self.aAmount= self.aAmount + msg.amount;
         }
