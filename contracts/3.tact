@@ -88,13 +88,13 @@ contract Task3 with Deployable {
       let sendBack: Bool = false;
 
       if (from == self.jAddressA) {            
-        amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = self.b < amount_out / self.decimal;
+        amount_out = self.price(self.jAddressB) * amount_in / self.decimal;
+        sendBack = self.b < amount_out;
       }
         
       if (from == self.jAddressB) {   
-        amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = self.a < amount_out / self.decimal;
+        amount_out = self.price(self.jAddressA) * amount_in / self.decimal;
+        sendBack = self.a < amount_out;
       }
 
       require(amount_out> 0, "Not enough jettons");
@@ -104,7 +104,7 @@ contract Task3 with Deployable {
           to: from,
           value: 0, 
           mode: SendRemainingValue, 
-          bounce: false, 
+          bounce: true, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_in,
@@ -122,7 +122,7 @@ contract Task3 with Deployable {
           to: from,
           value: 0, 
           mode: SendRemainingValue, 
-          bounce: false, 
+          bounce: true, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
