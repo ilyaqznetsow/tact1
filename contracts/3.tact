@@ -105,11 +105,13 @@ contract Task3 with Deployable {
         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
+          jettonContract = self.jettonAddressA;
         }
         
         if (jettonContract == self.jettonAddressA) {
           self.bAmount = self.bAmount - amount_out;
           self.aAmount= self.aAmount + msg.amount;
+          jettonContract = self.jettonAddressB;
         }
       }
 
