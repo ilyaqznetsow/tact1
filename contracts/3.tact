@@ -69,8 +69,6 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     let allowed: Bool = false;
     let from: Address = sender();
-    allowed = from == self.jAddressA || from == self.jAddressB;
-    require(allowed, "Not allowed to add jettons");
 
     if(msg.from == self.owner){
       if(from == self.jAddressA){
@@ -81,52 +79,56 @@ contract Task3 with Deployable {
       return;
     }
 
+    allowed = from == self.jAddressA || from == self.jAddressB;
+    require(allowed, "Not allowed to add jettons");
+
       let amount_out: Int = 0;
       let amount_in: Int = msg.amount;
       let amount_left: Int = 0;
-      let sendBack: Bool = true;
+      let sendBack: Bool = false;
 
       if (from == self.jAddressA) {            
         amount_out = self.price(self.jAddressB) * amount_in;
-        sendBack = !(self.b >= amount_out);
+        sendBack = self.b < amount_out;
       }
         
       if (from == self.jAddressB) {            
         amount_out = self.price(self.jAddressA) * amount_in;
-        sendBack = !(self.a >= amount_out);
+        sendBack = self.a < amount_out;
       }
 
 
       if(sendBack){
         send(SendParameters{
           to: from,
-          value: ton("0.1"), 
-          mode: 0, 
+          value: 0, 
+          mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_in,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: ton("0.01"),
+            forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
+        return;
       }
       else {            
         send(SendParameters{
           to: from,
-          value: ton("0.1"), 
-          mode: 0, 
+          value: 0, 
+          mode: SendRemainingValue, 
           bounce: false, 
           body: TokenTransfer {
             queryId: msg.queryId,
             amount: amount_out,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: ton("0.01"),
+            forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
