@@ -66,29 +66,38 @@ contract Task3 with Deployable {
     self.decimal = 1000000000;
   }
 
-  receive(msg: TokenNotification) { 
-      let valueToSend: Int = 0;
-      let sendBack: Bool = false;
-      let jAddress: Address = msg.from;
+  receive(msg: TokenNotification) {
+    let allowed: Bool = false;
+    allowed = msg.from == self.jAddressA || msg.from == self.jAddressB;
+    require(allowed, "Not allowed to add jettons");
 
-        if (msg.from == self.jAddressA) {
-            self.a = self.a + msg.amount;
-            
-            valueToSend = self.price(self.jAddressA) * msg.amount / self.decimal;
-            sendBack = self.b < valueToSend;
-        } else if (msg.from == self.jAddressB) {
-            self.b = self.b + msg.amount;
-            
-            valueToSend = self.price(self.jAddressB) * msg.amount / self.decimal;
-            sendBack = self.a < valueToSend;
-        } else {
-          throw(132);
-        }
+    if(sender() == self.owner){
+      if(msg.from == self.jAddressA){
+        self.a = self.a + msg.amount;
+      } else if(msg.from == self.jAddressB){
+        self.b = self.b + msg.amount;
+      }
+      return;
+    }
+
+      let valueToSend: Int = 0;
+
+      let sendBack: Bool = true;
+
+      if (msg.from == self.jAddressA) {            
+        valueToSend = self.price(self.jAddressB) * msg.amount;
+        sendBack = !(self.b >= valueToSend);
+      }
+        
+      if (msg.from == self.jAddressB) {            
+        valueToSend = self.price(self.jAddressA) * msg.amount;
+        sendBack = !(self.a >= valueToSend);
+      }
 
 
       if(sendBack){
         send(SendParameters{
-          to: context().sender,
+          to: sender(),
           value: 0, 
           mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
@@ -96,19 +105,16 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: sender(),
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
-        return;
       }
-      
-      if(context().sender != self.owner){
-      
+      else {            
         send(SendParameters{
-          to: jAddress,
+          to: msg.from,
           value: 0, 
           mode: SendRemainingValue + SendIgnoreErrors, 
           bounce: false, 
@@ -116,7 +122,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: valueToSend,
             destination: msg.from,
-            responseDestination: context().sender,
+            responseDestination: sender(),
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: msg.forwardPayload
@@ -145,6 +151,7 @@ contract Task3 with Deployable {
     if (jetton == self.jAddressB) {
       return self.b * self.decimal;
     }
-     return 0;
+    
+    return 0;
   }
 }
