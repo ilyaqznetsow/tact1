@@ -101,7 +101,7 @@ contract Task3 with Deployable {
 
       if(sendBack){
         send(SendParameters{
-          to: jettonContract,
+          to: sender(),
           value: 0, 
           mode: 64, 
           body: TokenTransfer {
@@ -118,7 +118,7 @@ contract Task3 with Deployable {
       }
       else {       
         send(SendParameters{
-          to: jettonContract,
+          to: sender(),
           value: 0, 
           mode: 64, 
           body: TokenTransfer {
@@ -143,21 +143,24 @@ contract Task3 with Deployable {
   } 
   
   get fun price(jetton: Address): Int {
-    // require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
+    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
 
     if (jetton == self.jAddressA) {
-      // require(self.b > 0, "Not enough jettons A");
+      require(self.b > 0, "Not enough jettons A");
       return (self.a * self.decimal) / self.b;
     }
     
     if (jetton == self.jAddressB) {
-      // require(self.a > 0, "Not enough jettons B");
+      require(self.a > 0, "Not enough jettons B");
       return (self.b * self.decimal) / self.a;
     }
+
     return 0;
   }
   
   get fun balance(jetton: Address): Int { 
+    require(jetton == self.jAddressA || jetton == self.jAddressB, "Not allowed to get price");
+
     if (jetton == self.jAddressA) {
       return self.a * self.decimal;
     } 
