@@ -69,6 +69,8 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     let jettonContract: Address = sender();
 
+    require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
+
     if(msg.from == self.owner){
       
       if(jettonContract == self.jettonAddressA){
@@ -85,9 +87,6 @@ contract Task3 with Deployable {
       let amount_out: Int = 0;
       let sendBack: Bool = false;
 
-      sendBack = jettonContract != self.jettonAddressA && jettonContract != self.jettonAddressB;
-
-
       if (jettonContract == self.jettonAddressA) {            
         amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
         sendBack = self.bAmount < amount_out;
@@ -100,7 +99,9 @@ contract Task3 with Deployable {
 
       if(sendBack){
         amount_out = msg.amount;
-      }else{
+      }
+      else
+      {
         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
@@ -144,10 +145,10 @@ contract Task3 with Deployable {
   
   get fun balance(jetton: Address): Int { 
     if (jetton == self.jettonAddressA) {
-      return self.aAmount * self.decimal;
+      return self.aAmount;
     } 
     if (jetton == self.jettonAddressB) {
-      return self.bAmount * self.decimal;
+      return self.bAmount;
     }
     
     return 0;
