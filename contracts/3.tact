@@ -89,13 +89,13 @@ contract Task3 with Deployable {
       let sendTo: Address = jettonContract;
 
       if (jettonContract == self.jettonAddressA) {
-        require(self.aAmount > 0, "Not enough jettons");
+        // require(self.aAmount > 0, "Not enough jettons");
         amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
         sendBack = self.bAmount < amount_out;
       }
         
       if (jettonContract == self.jettonAddressB) {   
-        require(self.bAmount > 0, "Not enough jettons");
+        // require(self.bAmount > 0, "Not enough jettons");
         amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
         sendBack = self.aAmount < amount_out;
       }
@@ -133,12 +133,12 @@ contract Task3 with Deployable {
           return;
         }
 
-        if (sendTo == self.jettonAddressB) {
+        if (sendTo == self.jettonAddressA) {
           self.aAmount = self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
         }
         
-        if (sendTo == self.jettonAddressA) {
+        if (sendTo == self.jettonAddressB) {
           self.bAmount = self.bAmount - amount_out;
           self.aAmount = self.aAmount + msg.amount;
         }
