@@ -88,15 +88,18 @@ contract Task3 with Deployable {
       let sendBack: Bool = false;
       let sendTo: Address = jettonContract;
 
+//  Example formula for amountOfBJettonToSend in A->B swap will be
+  //(amountOfJettonAOnContract * decimal / amountOfJettonBOnContract) * amountOfTokenAToSwap / decimal
       if (jettonContract == self.jettonAddressA) {
         // require(self.aAmount > 0, "Not enough jettons");
-        amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+                amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
         sendBack = self.bAmount < amount_out;
       }
         
       if (jettonContract == self.jettonAddressB) {   
         // require(self.bAmount > 0, "Not enough jettons");
-        amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+                amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+
         sendBack = self.aAmount < amount_out;
       }
 

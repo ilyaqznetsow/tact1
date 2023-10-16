@@ -115,9 +115,6 @@ contract Task4 with Deployable {
   }
 
   get fun time(): Int {
-    if(self.lockedUntil == 0) {
-      return 0;
-    }
     return self.lockedUntil - now();
   }
 
