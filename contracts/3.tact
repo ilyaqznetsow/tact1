@@ -108,9 +108,9 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_in,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
@@ -126,9 +126,9 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: amount_out,
             destination: msg.from,
-            responseDestination: null,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.01"),
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
