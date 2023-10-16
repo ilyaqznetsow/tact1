@@ -97,6 +97,7 @@ contract Task3 with Deployable {
         sendBack = self.aAmount < amount_out;
       }
 
+      let sendTo: Address? = null;
       if(sendBack){
         amount_out = msg.amount;
       }
@@ -105,18 +106,18 @@ contract Task3 with Deployable {
         if (jettonContract == self.jettonAddressB) {
           self.aAmount= self.aAmount - amount_out;
           self.bAmount = self.bAmount + msg.amount;
-          // jettonContract = self.jettonAddressA;
+          sendTo = self.jettonAddressA;
         }
         
         if (jettonContract == self.jettonAddressA) {
           self.bAmount = self.bAmount - amount_out;
           self.aAmount= self.aAmount + msg.amount;
-          // jettonContract = self.jettonAddressB;
+          sendTo = self.jettonAddressB;
         }
       }
 
         send(SendParameters{
-          to: jettonContract,
+          to: sendTo!!,
           value: 0,
           mode: 64, 
           body: TokenTransfer {
