@@ -80,14 +80,14 @@ contract Task4 with Deployable {
 
     self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
-    self.lockedUntil = now() + msg.forwardPayload.loadInt(32);
+    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
   }
 
   receive(msg: NftWithdrawal) {
     require(sender() == self.nftOwner, "Invalid sender");
     require(msg.nftAddress == self.lockedNft!!, "Invalid sender");
 
-    if (self.timeRemaining() >= 0) {
+    if (now() <= self.lockedUntil) {
       // Send a message back to the sender with the comment "NFT is still locked"
       send(SendParameters{
         to: sender(),
