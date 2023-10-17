@@ -48,7 +48,7 @@ message NftWithdrawal {
 
 contract Task4 with Deployable {
   seed: Int as uint128;
-  lockedUntil: Int as uint64 = 0;
+  lockedUntil: Int as uint32 = 0;
   lockedNft: Address?;
   nftOwner: Address?;
 
@@ -85,7 +85,7 @@ contract Task4 with Deployable {
     let ctx: Context = context();
 
     require(ctx.sender == self.nftOwner!!, "Invalid sender");
-    require(msg.nftAddress == self.lockedNft!!, "Invalid sender");
+    require(msg.nftAddress == self.lockedNft!!, "Invalid NFT address");
 
     if (now() < self.lockedUntil) {
       self.reply("NFT is still locked".asComment());
