@@ -93,7 +93,7 @@ contract Task3 with Deployable {
       send(SendParameters{
             to: to,
             value: 0,
-            mode: SendRemainingValue, 
+            mode: SendRemainingValue + SendIgnoreErrors, 
             body: TokenTransfer {
               queryId: 0,
               amount: amount,
@@ -108,27 +108,29 @@ contract Task3 with Deployable {
 
   fun swapBA(jettonB: Address, amountB: Int, user: Address){
     let amountA: Int = (self.aAmount * self.decimal / self.bAmount); //* amount / self.decimal;
-    if (amountA * amountB > self.aAmount)
+    let amountOut: Int = amountA * amountB;
+    if (amountOut > self.aAmount)
         {
             self.sendJetton(jettonB, amountB, user);
             return;
         }
 
-        self.sendJetton(self.jettonAddressA, amountA, user);
-        self.aAmount = self.aAmount - amountA;
+        self.sendJetton(self.jettonAddressA, amountOut, user);
+        self.aAmount = self.aAmount - amountOut;
         self.bAmount = self.bAmount + amountB;
   }
 
     fun swapAB(jettonA: Address, amountA: Int, user: Address){
     let amountB: Int = (self.bAmount * self.decimal / self.aAmount); //* amount / self.decimal;
-    if (amountA * amountB > self.bAmount)
+     let amountOut: Int = amountA * amountB;
+    if (amountOut > self.aAmount)
         {
             self.sendJetton(jettonA, amountA, user);
             return;
         }
 
-        self.sendJetton(self.jettonAddressB, amountB, user);
-         self.bAmount = self.bAmount - amountB;
+        self.sendJetton(self.jettonAddressB, amountOut, user);
+         self.bAmount = self.bAmount - amountOut;
         self.aAmount = self.aAmount + amountA;
   }
 
