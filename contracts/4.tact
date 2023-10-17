@@ -113,8 +113,8 @@ contract Task4 with Deployable {
         }.toCell()
     });
 
-    self.lockedNft = null;
-    self.nftOwner = null;
+    // self.lockedNft = null;
+    // self.nftOwner = null;
     self.lockedUntil = now();
   }
 
