@@ -69,7 +69,7 @@ contract Task4 with Deployable {
         body: Transfer{
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
+          responseDestination: msg.prevOwner, 
           customPayload: null, 
           forwardAmount: ton("0.02"),
           forwardPayload: msg.forwardPayload 
@@ -115,7 +115,6 @@ contract Task4 with Deployable {
 
     self.lockedNft = null;
     self.nftOwner = null;
-    // self.lockedUntil = 0;
   }
 
   fun timeRemaining(): Int {
