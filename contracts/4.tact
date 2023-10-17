@@ -57,11 +57,11 @@ contract Task4 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
-    let ctx: Context = context();
+    // let ctx: Context = context();
     if (self.lockedNft != null) {
       // Return the NFT back to the sender if the contract already holds an NFT
       send(SendParameters {
-        to: ctx.sender,
+        to: sender(),
         value: 0,
         mode: SendRemainingValue,
         body: Transfer{
@@ -76,7 +76,7 @@ contract Task4 with Deployable {
       return;
     }
 
-    self.lockedNft = ctx.sender;
+    self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
     self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
   }
@@ -84,7 +84,7 @@ contract Task4 with Deployable {
   receive(msg: NftWithdrawal) {
     let ctx: Context = context();
 
-    require(ctx.sender == self.nftOwner!!, "Invalid sender");
+    require(sender() == self.nftOwner, "Invalid sender");
     require(msg.nftAddress == self.lockedNft!!, "Invalid NFT address");
 
     if (now() < self.lockedUntil) {
