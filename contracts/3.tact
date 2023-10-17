@@ -81,8 +81,6 @@ contract Task3 with Deployable {
       return;
     }
 
-    require(msg.from != self.owner, "Admin can't swap");
-
     self.swap(ctx.sender, msg.amount, msg.from);
   }
 
@@ -129,32 +127,6 @@ contract Task3 with Deployable {
       self.bAmount = self.bAmount + amountIn;
     }
   }
-
-  // fun swapBA(amountB: Int, user: Address){
-  //     let amountOut: Int = self.jettonPrice(self.jettonAddressB) * amountB / self.decimal;
-  //     if (amountOut > self.aAmount)
-  //       {
-  //           self.sendJetton(self.jettonAddressB, amountB, user);
-  //           return;
-  //       }
-
-  //       self.sendJetton(self.jettonAddressA, amountOut, user);
-  //       self.aAmount = self.aAmount - amountOut;
-  //       self.bAmount = self.bAmount + amountB;
-  // }
-
-  //   fun swapAB(amountA: Int, user: Address){
-  //     let amountOut: Int = self.jettonPrice(self.jettonAddressA) * amountA / self.decimal;
-  //     if (amountOut > self.bAmount)
-  //       {
-  //         self.sendJetton(self.jettonAddressA, amountA, user);
-  //         return;
-  //       }
-
-  //       self.sendJetton(self.jettonAddressB, amountOut, user);
-  //       self.bAmount = self.bAmount - amountOut;
-  //       self.aAmount = self.aAmount + amountA;
-  //   }
 
   fun jettonPrice(jetton: Address): Int{
   if (jetton == self.jettonAddressA) {
