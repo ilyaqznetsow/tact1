@@ -109,14 +109,14 @@ contract Task4 with Deployable {
         }.toCell()
     });
 
-    // self.lockedNft = null;
-    // self.nftOwner = null;
+    self.lockedNft = null;
+    self.nftOwner = null;
   }
 
   fun timeRemaining(): Int {
-    if(self.lockedUntil <= 0) {
-      return 0;
-    }
+    // if(self.lockedUntil <= 0) {
+    //   return 0;
+    // }
     return self.lockedUntil - now();
   }
 
