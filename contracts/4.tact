@@ -69,7 +69,7 @@ contract Task4 with Deployable {
         body: Transfer{
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
-          responseDestination: msg.prevOwner, 
+          responseDestination: myAddress(), 
           customPayload: null, 
           forwardAmount: ton("0.02"),
           forwardPayload: msg.forwardPayload 
@@ -80,7 +80,7 @@ contract Task4 with Deployable {
 
     self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
-    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    self.lockedUntil = now() + msg.forwardPayload.loadInt(32);
   }
 
   receive(msg: NftWithdrawal) {
@@ -118,6 +118,9 @@ contract Task4 with Deployable {
   }
 
   fun timeRemaining(): Int {
+    if(self.lockedUntil == 0) {
+      return 0;
+    }
     return self.lockedUntil - now();
   }
   get fun time(): Int {
