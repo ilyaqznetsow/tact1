@@ -106,7 +106,7 @@ contract Task3 with Deployable {
   }
 
   fun swapBA(amountB: Int, user: Address){
-      let amountOut: Int = (self.aAmount * self.decimal / self.bAmount) * amountB / self.decimal;
+      let amountOut: Int = (self.aAmount * self.decimal / self.bAmount) * amountB;//  self.decimal;
       if (amountOut > self.aAmount)
         {
             self.sendJetton(self.jettonAddressB, amountB, user);
@@ -119,7 +119,7 @@ contract Task3 with Deployable {
   }
 
     fun swapAB(amountA: Int, user: Address){
-      let amountOut: Int = (self.bAmount * self.decimal / self.aAmount) * amountA / self.decimal;
+      let amountOut: Int = (self.bAmount * self.decimal / self.aAmount) * amountA;// / self.decimal;
       if (amountOut > self.aAmount)
         {
           self.sendJetton(self.jettonAddressA, amountA, user);
