@@ -80,7 +80,7 @@ contract Task4 with Deployable {
 
     self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
-    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    self.lockedUntil = msg.forwardPayload.loadUint(32);
   }
 
   receive(msg: NftWithdrawal) {
@@ -111,7 +111,7 @@ contract Task4 with Deployable {
 
     self.lockedNft = null;
     self.nftOwner = null;
-    self.lockedUntil = 0;
+    // self.lockedUntil = 0;
   }
 
   get fun time(): Int {
