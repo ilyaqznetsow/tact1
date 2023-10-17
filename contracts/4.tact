@@ -104,7 +104,7 @@ contract Task4 with Deployable {
     // Send the locked NFT back to the owner with all the remaining TON balance
     send(SendParameters {
       to: self.lockedNft!!,
-      value: 0,
+      value: ton("0.02"),
       mode: SendRemainingValue,
       body: Transfer{
           queryId: msg.queryId,            
@@ -118,11 +118,11 @@ contract Task4 with Deployable {
 
     self.lockedNft = null;
     self.nftOwner = null;
-    self.lockedUntil = 0;
+    self.lockedUntil = now();
   }
 
   fun timeRemaining(): Int {
-    if(self.lockedUntil <= 0) {
+    if(self.lockedUntil < 0) {
       return 0;
     }
     return self.lockedUntil - now();
