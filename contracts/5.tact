@@ -85,6 +85,7 @@ contract Task5 with Deployable {
     }
 
     if(ctx.value < self.requiredSwapFee){
+      nativeReserve(context().value, 1);
        send(SendParameters {
         to: ctx.sender,
         value: 0,
@@ -107,12 +108,11 @@ contract Task5 with Deployable {
      In other words: the contract's balance should increase by exactly 2 TON, some incoming TONs will be consumed for gas and the remainings of the incoming TONs should be refunded to the sender
   
 */
-    let index: Int = random(0, self.itemsSize);
+    let index: Int = random(0, self.itemsSize - 1);
     let nft: Address = self.items.get(index)!!;
 
-    let attachedTONs: Int = ctx.value;
     self.totalProfit = self.totalProfit + self.adminProfit;
-    let refundAmount: Int = attachedTONs - self.adminProfit;
+    let refundAmount: Int = ctx.value - self.adminProfit;
     
      send(SendParameters {
         to: ctx.sender,
@@ -134,20 +134,19 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender == self.owner, "Insufficient privileges");
-    // require(myBalance() >= self.requiredStorageFee, "Insufficient funds");
-
-    let amountToSend: Int = self.totalProfit - self.requiredStorageFee;
+    nativeReserve(ton("0.1"), 0);
+    // let amountToSend: Int = self.totalProfit - self.requiredStorageFee;
 
     send(SendParameters{
         to: self.owner,
-        value: amountToSend,
-        mode: 0,
+        value: 0,
+        mode: SendRemainingBalance + SendIgnoreErrors,
         body: AdminFetchProfit{
             queryId: msg.queryId
         }.toCell()
       });
 
-      self.totalProfit = self.requiredStorageFee;
+      // self.totalProfit = self.requiredStorageFee;
   }
 
 
@@ -170,7 +169,7 @@ contract Task5 with Deployable {
     repeat(self.itemsSize) {
        send(SendParameters {
         to: self.items.get(counter)!!,
-        value: 0,
+        value: self.nftWithdrawalFee,
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,            
@@ -189,7 +188,7 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
-    return self.totalProfit - self.requiredStorageFee;
+    return myBalance() - self.requiredStorageFee;
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
