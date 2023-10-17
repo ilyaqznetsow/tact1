@@ -70,80 +70,76 @@ contract Task3 with Deployable {
     let ctx: Context = context();
     let jettonContract: Address = ctx.sender;
 
+    require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
+
     if(msg.from == self.owner){
       
-      if(jettonContract == self.jettonAddressA){
-        self.aAmount = self.aAmount + msg.amount;
-      }
-
-      if(jettonContract == self.jettonAddressB){
-        self.bAmount = self.bAmount + msg.amount;
-      }
-
+      self.handleAdmin(jettonContract, msg.amount);
       return;
     }
-
-      require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
 
       let amount_out: Int = 0;
       let sendBack: Bool = false;
       let sendTo: Address = jettonContract;
 
       if (jettonContract == self.jettonAddressA) {
-        // require(self.aAmount > 0, "Not enough jettons");
-        amount_out = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
-        sendBack = amount_out > self.bAmount;
+        self.swapAB(jettonContract, msg.amount, msg.from);
+      } else if (jettonContract == self.jettonAddressB) {   
+       self.swapBA(jettonContract, msg.amount, msg.from);
       }
-        
-      if (jettonContract == self.jettonAddressB) {   
-        // require(self.bAmount > 0, "Not enough jettons");
-        amount_out = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
-        sendBack = amount_out > self.aAmount;
-      }
-
-      if(sendBack){
-        amount_out = msg.amount;
-      }
-      else
-      {
-        if (jettonContract == self.jettonAddressB) {
-          sendTo = self.jettonAddressA;
-        }
-        
-        if (jettonContract == self.jettonAddressA) {
-          sendTo = self.jettonAddressB;
-        }
-      }
-
-        send(SendParameters{
-          to: sendTo,
-          value: 0,
-          mode: SendRemainingValue, 
-          body: TokenTransfer {
-            queryId: 0,
-            amount: amount_out,
-            destination: msg.from,
-            responseDestination: myAddress(),
-            customPayload: null,
-            forwardTonAmount: ton("0.01"),
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
-
-        if(sendBack){
-          return;
-        }
-
-        if (sendTo == self.jettonAddressA) {
-          self.aAmount = self.aAmount - amount_out;
-          self.bAmount = self.bAmount + msg.amount;
-        }
-        
-        if (sendTo == self.jettonAddressB) {
-          self.bAmount = self.bAmount - amount_out;
-          self.aAmount = self.aAmount + msg.amount;
-        }
   } 
+
+  fun sendJetton(to: Address, amount: Int, user: Address) {
+      send(SendParameters{
+            to: to,
+            value: 0,
+            mode: SendRemainingValue, 
+            body: TokenTransfer {
+              queryId: 0,
+              amount: amount,
+              destination: user,
+              responseDestination: myAddress(),
+              customPayload: null,
+              forwardTonAmount: ton("0.01"),
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
+  }
+
+  fun swapBA(jettonB: Address, amountB: Int, user: Address){
+    let amountA: Int = (self.aAmount * self.decimal / self.bAmount); //* amount / self.decimal;
+    if (amountA * amountB > self.aAmount)
+        {
+            self.sendJetton(jettonB, amountB, user);
+            return;
+        }
+
+        self.sendJetton(self.jettonAddressA, amountA, user);
+        self.aAmount = self.aAmount - amountA;
+        self.bAmount = self.bAmount + amountB;
+  }
+
+    fun swapAB(jettonA: Address, amountA: Int, user: Address){
+    let amountB: Int = (self.bAmount * self.decimal / self.aAmount); //* amount / self.decimal;
+    if (amountA * amountB > self.bAmount)
+        {
+            self.sendJetton(jettonA, amountA, user);
+            return;
+        }
+
+        self.sendJetton(self.jettonAddressB, amountB, user);
+         self.bAmount = self.bAmount - amountB;
+        self.aAmount = self.aAmount + amountA;
+  }
+
+  fun handleAdmin(jetton: Address, amount: Int) {
+    if(jetton == self.jettonAddressA){
+      self.aAmount = self.aAmount + amount;
+    }
+    if(jetton == self.jettonAddressB){
+      self.bAmount = self.bAmount + amount;
+    }
+  }
   
   get fun price(jetton: Address): Int {
     if (jetton == self.jettonAddressA) {
