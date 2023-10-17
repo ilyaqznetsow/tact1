@@ -62,7 +62,7 @@ contract Task5 with Deployable {
   nftWithdrawalFee: Int as coins = ton("0.08");
   items: map<Int as uint16, Address>;
   itemsSize: Int as uint16 = 0;
-  totalProfit: Int as coins = 0;
+  // totalProfit: Int as coins = 0;
 
   init(seed: Int, owner: Address) {
     self.owner = owner;
@@ -111,7 +111,7 @@ contract Task5 with Deployable {
     let index: Int = random(0, self.itemsSize - 1);
     let nft: Address = self.items.get(index)!!;
 
-    self.totalProfit = self.totalProfit + self.adminProfit;
+    // self.totalProfit = self.totalProfit + self.adminProfit;
     let refundAmount: Int = ctx.value - self.adminProfit;
     
      send(SendParameters {
@@ -161,14 +161,15 @@ contract Task5 with Deployable {
     */
     let ctx: Context = context();
     let requiredTons: Int = ton("1") + self.itemsSize * self.nftWithdrawalFee;
-    require(ctx.value >= requiredTons, "Insufficient funds");
-    
-    require(ctx.sender == self.owner, "Insufficient privileges");
-    
-    let counter: Int = 0;
-    repeat(self.itemsSize) {
+
+    if(ctx.sender != myAddress()){
+      require(ctx.value >= requiredTons, "Insufficient funds");
+      require(ctx.sender == self.owner, "Insufficient privileges");
+    }
+    repeat(min(100, self.itemsSize)) {
+      self.itemsSize = self.itemsSize - 1;
        send(SendParameters {
-        to: self.items.get(counter)!!,
+        to: self.items.get(self.itemsSize)!!,
         value: self.nftWithdrawalFee,
         mode: 0,
         body: Transfer{
@@ -180,11 +181,20 @@ contract Task5 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-    
-     counter = counter + 1;
     }
 
-    self.items = emptyMap();
+     if (self.itemsSize > 0) {
+            send(SendParameters{
+                to: myAddress(),
+                value: ton("0.4"),
+                mode: 0,
+                body: AdminWithdrawalAllNFTs{
+                queryId:msg.queryId
+                }.toCell()
+            });
+        } else {
+            self.items = emptyMap();
+        }
   }
 
   get fun profit(): Int { 
