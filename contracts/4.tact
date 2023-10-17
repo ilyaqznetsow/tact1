@@ -70,7 +70,7 @@ contract Task4 with Deployable {
         body: Transfer{
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
+          responseDestination: msg.prevOwner, 
           customPayload: null, 
           forwardAmount: 0,
           forwardPayload: msg.forwardPayload 
@@ -90,7 +90,7 @@ contract Task4 with Deployable {
     require(ctx.sender == self.nftOwner!!, "Invalid sender");
     require(msg.nftAddress == self.lockedNft!!, "Invalid sender");
 
-    if (self.timeRemaining() > 0) {
+    if (self.lockedUntil - now() > 0) {
       // Send a message back to the sender with the comment "NFT is still locked"
       send(SendParameters{
         to: ctx.sender,
@@ -109,7 +109,7 @@ contract Task4 with Deployable {
       body: Transfer{
           queryId: msg.queryId,            
           newOwner: self.nftOwner!!, 
-          responseDestination: myAddress(), 
+          responseDestination: self.nftOwner!!, 
           customPayload: null, 
           forwardAmount: 0,
           forwardPayload: emptySlice()
@@ -118,7 +118,7 @@ contract Task4 with Deployable {
 
     self.lockedNft = null;
     self.nftOwner = null;
-    // self.lockedUntil = now();
+    self.lockedUntil = now();
   }
 
   fun timeRemaining(): Int {
@@ -127,6 +127,7 @@ contract Task4 with Deployable {
     }
     return self.lockedUntil - now();
   }
+
   get fun time(): Int {
     return self.timeRemaining();
   }
