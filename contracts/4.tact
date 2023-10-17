@@ -48,15 +48,12 @@ message NftWithdrawal {
 
 contract Task4 with Deployable {
   seed: Int as uint128;
-  lockedUntil: Int as uint32;
+  lockedUntil: Int as uint32 = 0;
   lockedNft: Address?;
   nftOwner: Address?;
 
   init(seed: Int) {
     self.seed = seed;
-    self.lockedUntil = 0;
-    self.lockedNft = null;
-    self.nftOwner = null;
   }
 
   receive(msg: OwnershipAssigned) {
