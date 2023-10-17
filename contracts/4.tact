@@ -90,7 +90,7 @@ contract Task4 with Deployable {
     require(ctx.sender == self.nftOwner!!, "Invalid sender");
     require(msg.nftAddress == self.lockedNft!!, "Invalid sender");
 
-    if (self.lockedUntil - now() > 0) {
+    if (self.lockedUntil - now() >= 0) {
       self.reply("NFT is still locked".asComment());
       return;
     }
@@ -114,9 +114,6 @@ contract Task4 with Deployable {
   }
 
   fun timeRemaining(): Int {
-    // if(self.lockedUntil <= 0) {
-    //   return 0;
-    // }
     return self.lockedUntil - now();
   }
 
