@@ -68,24 +68,23 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) {
     let ctx: Context = context();
-    let jettonContract: Address = ctx.sender;
 
-    require(jettonContract == self.jettonAddressA || jettonContract == self.jettonAddressB, "Wrong jetton");
+    require(ctx.sender == self.jettonAddressA || ctx.sender == self.jettonAddressB, "Wrong jetton");
 
     if(msg.from == self.owner){
-      self.handleAdmin(jettonContract, msg.amount);
+      self.handleAdmin(ctx.sender, msg.amount);
       return;
     }
 
     require(msg.from != self.owner, "Admin can't swap");
 
-      if (jettonContract == self.jettonAddressA) 
+      if (ctx.sender == self.jettonAddressA) 
       {
-        self.swapAB(self.jettonAddressA, msg.amount, msg.from);
+        self.swapAB(msg.amount, msg.from);
       } 
       else
       {   
-       self.swapBA(self.jettonAddressB, msg.amount, msg.from);
+       self.swapBA(msg.amount, msg.from);
       }
   }
 
@@ -106,11 +105,11 @@ contract Task3 with Deployable {
           });
   }
 
-  fun swapBA(jettonB: Address, amountB: Int, user: Address){
-      let amountOut: Int = (self.bAmount * self.decimal / self.aAmount) * amountB / self.decimal;
+  fun swapBA(amountB: Int, user: Address){
+      let amountOut: Int = (self.aAmount * self.decimal / self.bAmount) * amountB / self.decimal;
       if (amountOut > self.aAmount)
         {
-            self.sendJetton(jettonB, amountB, user);
+            self.sendJetton(self.jettonAddressB, amountB, user);
             return;
         }
 
@@ -119,11 +118,11 @@ contract Task3 with Deployable {
         self.bAmount = self.bAmount + amountB;
   }
 
-    fun swapAB(jettonA: Address, amountA: Int, user: Address){
-      let amountOut: Int = (self.aAmount * self.decimal / self.bAmount) * amountA / self.decimal;
+    fun swapAB(amountA: Int, user: Address){
+      let amountOut: Int = (self.bAmount * self.decimal / self.aAmount) * amountA / self.decimal;
       if (amountOut > self.aAmount)
         {
-          self.sendJetton(jettonA, amountA, user);
+          self.sendJetton(self.jettonAddressA, amountA, user);
           return;
         }
 
