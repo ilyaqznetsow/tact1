@@ -91,29 +91,23 @@ contract Task4 with Deployable {
     require(msg.nftAddress == self.lockedNft!!, "Invalid sender");
 
     if (self.lockedUntil - now() > 0) {
-      send(SendParameters{
-        to: ctx.sender,
-        value: 0,
-        mode: SendRemainingValue,
-        body: "NFT is still locked".asComment()
-      });
+      self.reply("NFT is still locked".asComment());
       return;
     }
 
-    // Send the locked NFT back to the owner with all the remaining TON balance
-    // send(SendParameters {
-    //   to: self.lockedNft!!,
-    //   value: 0,
-    //   mode: SendRemainingValue,
-    //   body: Transfer{
-    //       queryId: msg.queryId,            
-    //       newOwner: self.nftOwner!!, 
-    //       responseDestination: self.nftOwner!!, 
-    //       customPayload: null, 
-    //       forwardAmount: 0,
-    //       forwardPayload: emptySlice()
-    //     }.toCell()
-    // });
+    send(SendParameters {
+      to: self.lockedNft!!,
+      value: 0,
+      mode: SendRemainingValue,
+      body: Transfer{
+          queryId: msg.queryId,            
+          newOwner: self.nftOwner!!, 
+          responseDestination: self.nftOwner!!, 
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: emptySlice()
+        }.toCell()
+    });
 
     self.lockedNft = null;
     self.nftOwner = null;
@@ -121,7 +115,7 @@ contract Task4 with Deployable {
   }
 
   fun timeRemaining(): Int {
-    if(self.lockedUntil < 0) {
+    if(self.lockedUntil <= 0) {
       return 0;
     }
     return self.lockedUntil - now();
