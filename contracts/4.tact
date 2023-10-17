@@ -92,12 +92,12 @@ contract Task4 with Deployable {
 
     if (self.lockedUntil - now() > 0) {
       // Send a message back to the sender with the comment "NFT is still locked"
-      send(SendParameters{
-        to: ctx.sender,
-        value: 0,
-        mode: SendRemainingValue,
-        body: "NFT is still locked".asComment()
-      });
+      // send(SendParameters{
+      //   to: ctx.sender,
+      //   value: 0,
+      //   mode: SendRemainingValue,
+      //   body: "NFT is still locked".asComment()
+      // });
       return;
     }
 
