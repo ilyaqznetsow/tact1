@@ -186,7 +186,7 @@ contract Task5 with Deployable {
      if (self.itemsSize > 0) {
             send(SendParameters{
                 to: myAddress(),
-                value: self.nftsSendFee,
+                value: self.nftSendFee,
                 mode: 0,
                 body: AdminWithdrawalAllNFTs{
                 queryId:msg.queryId
