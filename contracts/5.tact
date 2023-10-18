@@ -60,6 +60,8 @@ contract Task5 with Deployable {
   requiredSwapFee: Int as coins = ton("2.1");
   requiredStorageFee: Int as coins = ton("0.1");
   nftWithdrawalFee: Int as coins = ton("0.08");
+  minimumTonValue: Int as coins = ton("1");
+  nftSendFee: Int as coins = ton("0.08");
   items: map<Int as uint16, Address>;
   itemsSize: Int as uint16 = 0;
   // totalProfit: Int as coins = 0;
@@ -75,7 +77,6 @@ contract Task5 with Deployable {
    - if prevOwner is the owner's (admin) address, then add NFT to the collection
    - if value of TON attached is less then 2.1 TON then stop execution and return NFT back,
      but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
-
   */
     let ctx: Context = context();
     if(msg.prevOwner == self.owner) {
@@ -134,8 +135,7 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender == self.owner, "Insufficient privileges");
-    nativeReserve(ton("0.1"), 0);
-    // let amountToSend: Int = self.totalProfit - self.requiredStorageFee;
+    nativeReserve(self.requiredStorageFee, 0);
 
     send(SendParameters{
         to: self.owner,
@@ -145,8 +145,6 @@ contract Task5 with Deployable {
             queryId: msg.queryId
         }.toCell()
       });
-
-      // self.totalProfit = self.requiredStorageFee;
   }
 
 
@@ -160,7 +158,7 @@ contract Task5 with Deployable {
    - SC should be able to withdraw all NFTs by a single message from admin
     */
     let ctx: Context = context();
-    let requiredTons: Int = ton("1") + self.itemsSize * self.nftWithdrawalFee;
+    let requiredTons: Int = self.minimumTonValue + self.itemsSize * self.nftWithdrawalFee;
 
     if(ctx.sender != myAddress()){
       require(ctx.value >= requiredTons, "Insufficient funds");
@@ -170,7 +168,7 @@ contract Task5 with Deployable {
       self.itemsSize = self.itemsSize - 1;
        send(SendParameters {
         to: self.items.get(self.itemsSize)!!,
-        value: ton("0.02"),
+        value: self.nftSendFee,
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,            
