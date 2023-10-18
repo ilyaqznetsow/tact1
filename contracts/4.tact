@@ -57,15 +57,13 @@ contract Task4 with Deployable {
     self.lockedUntil = 0;
   }
 
-  receive(msg: OwnershipAssigned) {
-    let ctx: Context = context();
-    
+  receive(msg: OwnershipAssigned) {    
     if (self.lockedNft != null) {
-      self.sendTo(ctx.sender, msg.prevOwner, msg.queryId);     
+      self.sendTo(sender(), msg.prevOwner, msg.queryId);     
       return;
     }
 
-    self.lockedNft = ctx.sender;
+    self.lockedNft = sender();
     self.nftOwner = msg.prevOwner; 
     self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
   }
