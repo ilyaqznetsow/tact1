@@ -12,18 +12,7 @@ import "@stdlib/deploy";
 
   In details, the smart contract (later: SC) should have this logic:
   Messages
-  * AdminWithdrawalProfit 
-   - SC should check that sender is the admin / otherwise throw "Insufficient privelegies"
-   - SC should send all collected fees to admin except 0.1 TON (use AdminFetchProfit message as body)
-     In other words: after each such operation, the contract's balance should be equal to 0.1 TON (which are reserved for storage) and the rest should be sent to the admin
 
-
-  Getters
-  * profit
-   - returns how much collected fees is available to withdraw for the admin (all fees minus 0.1 TON)
-  * nfts
-   - returns dict of held NFTs with NFT indexes (sequential numbers from 0, 1, 2 ... and up to 'totalNftsHeld-1') as keys and NFT address as values 
-     the order of NFTs in this dictionary doesn't matter
 */
 
 message AdminWithdrawalProfit {
@@ -72,7 +61,7 @@ contract Task5 with Deployable {
 
   receive(msg: OwnershipAssigned) {
 /*
-      * OwnershipAssigned 
+    * OwnershipAssigned 
    - if prevOwner is the owner's (admin) address, then add NFT to the collection
    - if value of TON attached is less then 2.1 TON then stop execution and return NFT back,
      but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
@@ -111,11 +100,10 @@ contract Task5 with Deployable {
     let index: Int = random(0, self.itemsSize - 1);
     let nft: Address = self.items.get(index)!!;
 
-    // self.totalProfit = self.totalProfit + self.adminProfit;
     let refundAmount: Int = ctx.value - self.adminProfit;
     
      send(SendParameters {
-        to: ctx.sender,
+        to: nft,
         value: refundAmount,
         mode: SendIgnoreErrors,
         body: Transfer{
@@ -132,6 +120,12 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
+    /*
+      * AdminWithdrawalProfit 
+   - SC should check that sender is the admin / otherwise throw "Insufficient privelegies"
+   - SC should send all collected fees to admin except 0.1 TON (use AdminFetchProfit message as body)
+     In other words: after each such operation, the contract's balance should be equal to 0.1 TON (which are reserved for storage) and the rest should be sent to the admin
+    */
     let ctx: Context = context();
     require(ctx.sender == self.owner, "Insufficient privileges");
     nativeReserve(self.requiredStorageFee, 0);
@@ -197,6 +191,14 @@ contract Task5 with Deployable {
         }
   }
 
+/*
+  Getters
+  * profit
+   - returns how much collected fees is available to withdraw for the admin (all fees minus 0.1 TON)
+  * nfts
+   - returns dict of held NFTs with NFT indexes (sequential numbers from 0, 1, 2 ... and up to 'totalNftsHeld-1') as keys and NFT address as values 
+     the order of NFTs in this dictionary doesn't matter
+    */
   get fun profit(): Int { 
     return myBalance() - self.requiredStorageFee;
   }
