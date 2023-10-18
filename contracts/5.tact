@@ -74,7 +74,7 @@ contract Task5 with Deployable {
     }
 
     if(ctx.value < self.requiredSwapFee){
-      nativeReserve(context().value, 1);
+      // nativeReserve(context().value, 1);
        send(SendParameters {
         to: ctx.sender,
         value: 0,
@@ -133,7 +133,7 @@ contract Task5 with Deployable {
     send(SendParameters{
         to: self.owner,
         value: 0,
-        mode: SendRemainingBalance + SendIgnoreErrors,
+        mode: 128,
         body: AdminFetchProfit{
             queryId: msg.queryId
         }.toCell()
@@ -180,7 +180,7 @@ contract Task5 with Deployable {
      if (self.itemsSize > 0) {
             send(SendParameters{
                 to: myAddress(),
-                value: self.nftWithdrawalFee,
+                value: self.nftSendFee,
                 mode: 0,
                 body: AdminWithdrawalAllNFTs{
                   queryId:msg.queryId
@@ -200,8 +200,7 @@ contract Task5 with Deployable {
      the order of NFTs in this dictionary doesn't matter
     */
   get fun profit(): Int { 
-    // return myBalance() - self.requiredStorageFee;
-    return 0;
+    return myBalance() - self.requiredStorageFee;
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
