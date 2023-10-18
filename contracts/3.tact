@@ -82,7 +82,8 @@ contract Task3 with Deployable {
       } 
       else
       {   
-       self.swapBA(msg.amount, msg.from);
+      //  self.swapBA(msg.amount, msg.from);
+        self.swap(msg.amount, self.jettonAddressB, self.jettonAddressA, self.bAmount, self.aAmount, msg.from);
       }
   }
 
@@ -101,6 +102,19 @@ contract Task3 with Deployable {
               forwardPayload: emptySlice()
             }.toCell()
           });
+  }
+
+ fun swap(amountIn: Int, jettonIn: Address, jettonOut: Address, jSwapFrom: Int, jSwapTo: Int, user: Address){
+      let amountOut: Int = self.jettonPrice(jettonIn) * amountIn / self.decimal;
+      if (amountOut > jSwapTo)
+        {
+            self.sendJetton(jettonIn, amountIn, user);
+            return;
+        }
+
+        self.sendJetton(jettonOut, amountOut, user);
+        jSwapTo = jSwapTo - amountOut;
+        jSwapFrom = jSwapFrom + amountIn;
   }
 
   fun swapBA(amountB: Int, user: Address){
