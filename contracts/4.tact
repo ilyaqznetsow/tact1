@@ -100,7 +100,7 @@ contract Task4 with Deployable {
           body: beginCell().storeUint(0x5fcc3d14, 32)
           .storeUint(queryId, 64).storeAddress(owner)
           .storeAddress(owner).storeInt(0, 1)
-          .storeCoins(0).storeInt(0, 0).endCell()
+          .storeCoins(0).storeInt(0, 1).storeRef(beginCell().endCell()).endCell()
         });
   }
 
