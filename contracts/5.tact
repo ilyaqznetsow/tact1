@@ -61,10 +61,9 @@ contract Task5 with Deployable {
   requiredStorageFee: Int as coins = ton("0.1");
   nftWithdrawalFee: Int as coins = ton("0.08");
   minimumTonValue: Int as coins = ton("1");
-  nftSendFee: Int as coins = ton("0.08");
+  nftSendFee: Int as coins = ton("0.02");
   items: map<Int as uint16, Address>;
   itemsSize: Int as uint16 = 0;
-  // totalProfit: Int as coins = 0;
 
   init(seed: Int, owner: Address) {
     self.owner = owner;
