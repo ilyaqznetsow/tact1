@@ -96,6 +96,9 @@ contract Task5 with Deployable {
      In other words: the contract's balance should increase by exactly 2 TON, some incoming TONs will be consumed for gas and the remainings of the incoming TONs should be refunded to the sender
   
 */
+    self.items.set(self.itemsSize, ctx.sender);
+    self.itemsSize = self.itemsSize + 1;
+
     let index: Int = random(0, self.itemsSize - 1);
     let nft: Address = self.items.get(index)!!;
 
@@ -104,7 +107,7 @@ contract Task5 with Deployable {
      send(SendParameters {
         to: nft,
         value: refundAmount,
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer{
             queryId: msg.queryId,         
             newOwner: msg.prevOwner, 
@@ -179,8 +182,8 @@ contract Task5 with Deployable {
      if (self.itemsSize > 0) {
             send(SendParameters{
                 to: myAddress(),
-                value: self.nftSendFee,
-                mode: 0,
+                value: 0,
+                mode: 64,
                 body: AdminWithdrawalAllNFTs{
                   queryId:msg.queryId
                 }.toCell()
