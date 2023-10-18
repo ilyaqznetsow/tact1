@@ -70,11 +70,16 @@ contract Task3 with Deployable {
     require(sender() == self.jettonAddressA || sender() == self.jettonAddressB, "Wrong jetton");
 
     if(msg.from == self.owner){
-      self.handleAdmin(sender(), msg.amount);
+      if(sender() == self.jettonAddressA)
+      {
+        self.aAmount = self.aAmount + amount;
+      }
+      else
+      {
+        self.bAmount = self.bAmount + amount;
+      }
       return;
     }
-
-    require(msg.from != self.owner, "Admin can't swap");
 
       if (sender() == self.jettonAddressA) 
       {
@@ -128,15 +133,6 @@ contract Task3 with Deployable {
         self.bAmount = self.bAmount - amountOut;
         self.aAmount = self.aAmount + amountA;
     }
-
-  fun handleAdmin(jetton: Address, amount: Int) {
-    if(jetton == self.jettonAddressA){
-      self.aAmount = self.aAmount + amount;
-    }
-    if(jetton == self.jettonAddressB){
-      self.bAmount = self.bAmount + amount;
-    }
-  }
 
   fun jettonPrice(jetton: Address): Int{
   if (jetton == self.jettonAddressA) {
