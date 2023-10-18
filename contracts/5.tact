@@ -87,6 +87,7 @@ contract Task5 with Deployable {
     }
 
     nativeReserve(ton("2.0"), 0);
+
      send(SendParameters {
         to: nft,
         value: 0,
@@ -97,7 +98,7 @@ contract Task5 with Deployable {
             responseDestination: msg.prevOwner, 
             customPayload: null, 
             forwardAmount: 0,
-            forwardPayload: msg.forwardPayload
+            forwardPayload: emptySlice()
           }.toCell()
         });
   }
