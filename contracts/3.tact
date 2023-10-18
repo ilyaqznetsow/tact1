@@ -69,25 +69,27 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     require(sender() == self.jettonAddressA || sender() == self.jettonAddressB, "Wrong jetton");
 
-    if(msg.from == self.owner){
       if(sender() == self.jettonAddressA)
       {
-        self.aAmount = self.aAmount + amount;
+        if(msg.from == self.owner) 
+        {
+          self.aAmount = self.aAmount + msg.amount;
+        }
+        else 
+        {
+          self.swapAB(msg.amount, msg.from);
+        }
       }
       else
       {
-        self.bAmount = self.bAmount + amount;
-      }
-      return;
-    }
-
-      if (sender() == self.jettonAddressA) 
-      {
-        self.swapAB(msg.amount, msg.from);
-      } 
-      else
-      {   
-       self.swapBA(msg.amount, msg.from);
+        if(msg.from == self.owner)
+        {
+          self.bAmount = self.bAmount + msg.amount;
+        }
+        else
+        {
+          self.swapBA(msg.amount, msg.from);
+        }
       }
   }
 
