@@ -86,10 +86,11 @@ contract Task5 with Deployable {
       self.items.set(index, ctx.sender);
     }
 
+    nativeReserve(ton("2.0"), 0);
      send(SendParameters {
         to: nft,
-        value: ctx.value - ton("2.0"),
-        mode: 0,
+        value: 0,
+        mode: 128,
         body: Transfer{
             queryId: msg.queryId,         
             newOwner: msg.prevOwner, 
