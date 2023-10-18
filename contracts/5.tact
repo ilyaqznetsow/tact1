@@ -163,11 +163,14 @@ contract Task5 with Deployable {
       require(ctx.value >= requiredTons, "Insufficient funds");
       require(ctx.sender == self.owner, "Insufficient privileges");
     }
+
+    acceptMessage();
+
     repeat(min(100, self.itemsSize)) {
       self.itemsSize = self.itemsSize - 1;
        send(SendParameters {
         to: self.items.get(self.itemsSize)!!,
-        value: self.nftSendFee,
+        value: self.nftWithdrawalFee,
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,            
@@ -183,8 +186,8 @@ contract Task5 with Deployable {
      if (self.itemsSize > 0) {
             send(SendParameters{
                 to: myAddress(),
-                value: 0,
-                mode: 64,
+                value: self.nftsSendFee,
+                mode: 0,
                 body: AdminWithdrawalAllNFTs{
                 queryId:msg.queryId
                 }.toCell()
