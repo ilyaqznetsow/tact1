@@ -186,10 +186,10 @@ contract Task5 with Deployable {
      if (self.itemsSize > 0) {
             send(SendParameters{
                 to: myAddress(),
-                value: 0,
-                mode: 128,
+                value: self.nftWithdrawalFee,
+                mode: 0,
                 body: AdminWithdrawalAllNFTs{
-                queryId:msg.queryId
+                  queryId:msg.queryId
                 }.toCell()
             });
         } else {
