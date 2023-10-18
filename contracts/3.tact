@@ -67,18 +67,16 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    let ctx: Context = context();
-
-    require(ctx.sender == self.jettonAddressA || ctx.sender == self.jettonAddressB, "Wrong jetton");
+    require(sender() == self.jettonAddressA || sender() == self.jettonAddressB, "Wrong jetton");
 
     if(msg.from == self.owner){
-      self.handleAdmin(ctx.sender, msg.amount);
+      self.handleAdmin(sender(), msg.amount);
       return;
     }
 
     require(msg.from != self.owner, "Admin can't swap");
 
-      if (ctx.sender == self.jettonAddressA) 
+      if (sender() == self.jettonAddressA) 
       {
         self.swapAB(msg.amount, msg.from);
       } 
