@@ -60,12 +60,12 @@ contract Task4 with Deployable {
   receive(msg: OwnershipAssigned) {    
     if (self.lockedNft != null) {
       self.sendTo(sender(), msg.prevOwner, msg.queryId);     
-      return;
     }
-
-    self.lockedNft = sender();
-    self.nftOwner = msg.prevOwner; 
-    self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    else {
+      self.lockedNft = sender();
+      self.nftOwner = msg.prevOwner; 
+      self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
+    }
   }
 
   receive(msg: NftWithdrawal) {
@@ -74,13 +74,14 @@ contract Task4 with Deployable {
 
     if (now() < self.lockedUntil) {
       self.reply("NFT is still locked".asComment());
-      return;
     }
+    else 
+    {
+      self.sendTo(self.lockedNft!!, self.nftOwner!!, msg.queryId);
 
-    self.sendTo(self.lockedNft!!, self.nftOwner!!, msg.queryId);
-
-    self.lockedNft = null;
-    self.nftOwner = null;
+      self.lockedNft = null;
+      self.nftOwner = null;
+    }
   }
 
   inline fun sendTo(to: Address, owner: Address, queryId: Int) {
