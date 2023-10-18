@@ -71,9 +71,7 @@ contract Task4 with Deployable {
   }
 
   receive(msg: NftWithdrawal) {
-    let ctx: Context = context();
-
-    require(ctx.sender == self.nftOwner, "Invalid sender");
+    require(sender()r == self.nftOwner, "Invalid sender");
     require(msg.nftAddress == self.lockedNft!!, "Invalid NFT address");
 
     if (now() < self.lockedUntil) {
