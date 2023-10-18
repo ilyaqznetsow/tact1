@@ -61,19 +61,21 @@ contract Task5 with Deployable {
       return;
     }
 
-    if(ctx.value < ton("2.1")){
-       send(SendParameters {
-        to: ctx.sender,
-        value: 0,
-        mode: 64,
-        body: Transfer{
+    let body: Cell = Transfer{
             queryId: msg.queryId,         
             newOwner: msg.prevOwner, 
             responseDestination: msg.prevOwner, 
             customPayload: null, 
             forwardAmount: 0,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+
+    if(ctx.value < ton("2.1")){
+       send(SendParameters {
+        to: ctx.sender,
+        value: 0,
+        mode: 64,
+        body: body
         });
         return;
     }   
@@ -95,14 +97,7 @@ contract Task5 with Deployable {
         to: nft,
         value: 0,
         mode: 128,
-        body: Transfer{
-            queryId: msg.queryId,         
-            newOwner: msg.prevOwner, 
-            responseDestination: msg.prevOwner, 
-            customPayload: null, 
-            forwardAmount: 0,
-            forwardPayload: emptySlice()
-          }.toCell()
+        body: body
         });
   }
 
@@ -141,7 +136,7 @@ contract Task5 with Deployable {
         
     repeat(min(100, self.itemsSize)) {
       self.itemsSize = self.itemsSize - 1;
-      
+
        send(SendParameters {
         to: self.items.get(self.itemsSize)!!,
         value: ton("0.02"),
