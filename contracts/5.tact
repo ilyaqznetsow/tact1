@@ -54,9 +54,8 @@ contract Task5 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
-    let ctx: Context = context();
     if(msg.prevOwner == self.owner) {
-      self.items.set(self.itemsSize, ctx.sender);
+      self.items.set(self.itemsSize, sender());
       self.itemsSize = self.itemsSize + 1;
       return;
     }
@@ -70,9 +69,9 @@ contract Task5 with Deployable {
             forwardPayload: emptySlice()
           }.toCell();
 
-    if(ctx.value < ton("2.1")){
+    if(context().value < ton("2.1")){
        send(SendParameters {
-          to: ctx.sender,
+          to: sender(),
           value: 0,
           mode: 64,
           body: body
@@ -84,11 +83,11 @@ contract Task5 with Deployable {
     let nft: Address = self.items.get(index)!!;
 
     if(index == self.itemsSize){
-      nft = ctx.sender;
+      nft = sender();
     }
     else
     {
-      self.items.set(index, ctx.sender);
+      self.items.set(index, sender());
     }
 
     nativeReserve(ton("2.0"), 0);
@@ -116,11 +115,9 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
-    let ctx: Context = context();
-
-    if(ctx.sender != myAddress()){
-      require(ctx.value >= (ton("1") + self.itemsSize * ton("0.08")), "Insufficient funds");
-      require(ctx.sender == self.owner, "Insufficient privileges");
+    if(sender() != myAddress()){
+      require(context().value >= (ton("1") + self.itemsSize * ton("0.08")), "Insufficient funds");
+      require(sender() == self.owner, "Insufficient privileges");
     }
 
     acceptMessage();
