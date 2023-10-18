@@ -65,7 +65,7 @@ contract Task5 with Deployable {
        send(SendParameters {
         to: ctx.sender,
         value: 0,
-        mode: SendRemainingValue,
+        mode: 64,
         body: Transfer{
             queryId: msg.queryId,         
             newOwner: msg.prevOwner, 
@@ -79,10 +79,13 @@ contract Task5 with Deployable {
     }   
 
     let index: Int = random(0, self.itemsSize);
-    let nft: Address = ctx.sender;
+    let nft: Address = self.items.get(index)!!;
 
-    if(index != self.itemsSize){
-      nft = self.items.get(index)!!;
+    if(index == self.itemsSize){
+      nft = ctx.sender;
+    }
+    else
+    {
       self.items.set(index, ctx.sender);
     }
 
@@ -104,9 +107,7 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
-
-    let ctx: Context = context();
-    require(ctx.sender == self.owner, "Insufficient privileges");
+    require(sender() == self.owner, "Insufficient privileges");
     nativeReserve(ton("0.1"), 0);
 
     send(SendParameters{
@@ -121,29 +122,31 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
-    let requiredTons: Int = ton("1") + self.itemsSize * ton("0.08");
 
     if(ctx.sender != myAddress()){
-      require(ctx.value >= requiredTons, "Insufficient funds");
+      require(ctx.value >= (ton("1") + self.itemsSize * ton("0.08")), "Insufficient funds");
       require(ctx.sender == self.owner, "Insufficient privileges");
     }
 
     acceptMessage();
 
-    repeat(min(100, self.itemsSize)) {
-      self.itemsSize = self.itemsSize - 1;
-       send(SendParameters {
-        to: self.items.get(self.itemsSize)!!,
-        value: ton("0.02"),
-        mode: 0,
-        body: Transfer{
+    let body: Cell = Transfer{
             queryId: msg.queryId,            
             newOwner: self.owner, 
             responseDestination: self.owner, 
             customPayload: null, 
             forwardAmount: 0,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+        
+    repeat(min(100, self.itemsSize)) {
+      self.itemsSize = self.itemsSize - 1;
+      
+       send(SendParameters {
+        to: self.items.get(self.itemsSize)!!,
+        value: ton("0.02"),
+        mode: 0,
+        body: body
         });
     }
 
