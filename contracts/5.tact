@@ -82,26 +82,22 @@ contract Task5 with Deployable {
           }.toCell()
         });
         return;
-    }
-
-    // self.items.set(self.itemsSize, ctx.sender);
-   
+    }   
 
     let index: Int = random(0, self.itemsSize);
+    let nft: Address = ctx.sender;
 
-     self.itemsSize = self.itemsSize + 1;
-    let nft: Address = self.items.get(index)!!;
-    let refundAmount: Int = ctx.value - self.adminProfit;
     if(index == self.itemsSize){
       nft = ctx.sender;
     }
     else{
+      nft = self.items.get(index)!!;
       self.items.set(index, ctx.sender);
     }
 
      send(SendParameters {
         to: nft,
-        value: refundAmount,
+        value: ctx.value - self.adminProfit,
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,         
