@@ -92,8 +92,9 @@ contract Task5 with Deployable {
     }
     else{
       nft = self.items.get(index)!!;
-      self.items.set(index, ctx.sender);
     }
+
+      self.items.set(index, ctx.sender);
 
      send(SendParameters {
         to: nft,
