@@ -200,7 +200,8 @@ contract Task5 with Deployable {
      the order of NFTs in this dictionary doesn't matter
     */
   get fun profit(): Int { 
-    return myBalance() - self.requiredStorageFee;
+    // return myBalance() - self.requiredStorageFee;
+    return 0;
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
