@@ -72,10 +72,10 @@ contract Task5 with Deployable {
 
     if(ctx.value < ton("2.1")){
        send(SendParameters {
-        to: ctx.sender,
-        value: 0,
-        mode: 64,
-        body: body
+          to: ctx.sender,
+          value: 0,
+          mode: 64,
+          body: body
         });
         return;
     }   

@@ -61,20 +61,7 @@ contract Task4 with Deployable {
     let ctx: Context = context();
     
     if (self.lockedNft != null) {
-      // Return the NFT back to the sender if the contract already holds an NFT
-      send(SendParameters {
-        to: ctx.sender,
-        value: 0,
-        mode: SendRemainingValue,
-        body: Transfer{
-          queryId: msg.queryId,            
-          newOwner: msg.prevOwner, 
-          responseDestination: msg.prevOwner, 
-          customPayload: null, 
-          forwardAmount: 0,
-          forwardPayload: emptySlice()
-        }.toCell()
-      });
+      self.sendTo(ctx.sender, msg.prevOwner, msg.queryId);     
       return;
     }
 
@@ -94,30 +81,30 @@ contract Task4 with Deployable {
       return;
     }
 
-    send(SendParameters {
-      to: self.lockedNft!!,
-      value: 0,
-      mode: SendRemainingValue,
-      body: Transfer{
-          queryId: msg.queryId,            
-          newOwner: self.nftOwner!!, 
-          responseDestination: self.nftOwner!!, 
-          customPayload: null, 
-          forwardAmount: 0,
-          forwardPayload: emptySlice()
-        }.toCell()
-    });
+    self.sendTo(self.lockedNft!!, self.nftOwner!!, msg.queryId);
 
     self.lockedNft = null;
     self.nftOwner = null;
   }
 
-  fun timeRemaining(): Int {
-    return self.lockedUntil - now();
+  inline fun sendTo(to: Address, owner: Address, queryId: Int) {
+    send(SendParameters {
+          to: to,
+          value: 0,
+          mode: SendRemainingValue,
+          body: Transfer{
+              queryId: queryId,            
+              newOwner: owner, 
+              responseDestination: owner, 
+              customPayload: null, 
+              forwardAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+        });
   }
 
   get fun time(): Int {
-    return self.timeRemaining();
+    return self.lockedUntil - now();
   }
 
   get fun nft(): Address? {
