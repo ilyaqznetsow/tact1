@@ -49,6 +49,12 @@ message(0xf8a7ea5) TokenTransfer {
      forwardPayload: Slice as remaining; // should be emptySlice()
 }
 
+  struct SwapResult{
+    amountOut: Int;
+    amountIn: Int;
+  }
+
+
 contract Task3 with Deployable {
   owner: Address;
   aAmount: Int;
@@ -83,7 +89,9 @@ contract Task3 with Deployable {
       else
       {   
       //  self.swapBA(msg.amount, msg.from);
-        self.swap(msg.amount, self.jettonAddressB, self.jettonAddressA, self.bAmount, self.aAmount, msg.from);
+        let baResult: SwapResult = self.swap(msg.amount, self.jettonAddressB, self.jettonAddressA, self.bAmount, self.aAmount, msg.from);
+        self.aAmount = self.aAmount - baResult.amountOut;
+        self.bAmount = self.bAmount + baResult.amountIn;
       }
   }
 
@@ -104,17 +112,18 @@ contract Task3 with Deployable {
           });
   }
 
- fun swap(amountIn: Int, jettonIn: Address, jettonOut: Address, jSwapFrom: Int, jSwapTo: Int, user: Address){
+ fun swap(amountIn: Int, jettonIn: Address, jettonOut: Address, jSwapFrom: Int, jSwapTo: Int, user: Address) : SwapResult {
       let amountOut: Int = self.jettonPrice(jettonIn) * amountIn / self.decimal;
       if (amountOut > jSwapTo)
         {
             self.sendJetton(jettonIn, amountIn, user);
-            return;
+            return SwapResult{amountOut: 0, amountIn: 0};
         }
 
         self.sendJetton(jettonOut, amountOut, user);
-        jSwapTo = jSwapTo - amountOut;
-        jSwapFrom = jSwapFrom + amountIn;
+        // jSwapTo = jSwapTo - amountOut;
+        // jSwapFrom = jSwapFrom + amountIn;
+        return SwapResult{amountOut: amountOut, amountIn: amountIn};
   }
 
   fun swapBA(amountB: Int, user: Address){
