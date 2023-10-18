@@ -74,7 +74,6 @@ contract Task5 with Deployable {
     }
 
     if(ctx.value < self.requiredSwapFee){
-      // nativeReserve(context().value, 1);
        send(SendParameters {
         to: ctx.sender,
         value: 0,
@@ -85,7 +84,7 @@ contract Task5 with Deployable {
             responseDestination: msg.prevOwner, 
             customPayload: null, 
             forwardAmount: 0,
-            forwardPayload: emptySlice()
+            forwardPayload: msg.forwardPayload
           }.toCell()
         });
         return;
