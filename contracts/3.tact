@@ -78,9 +78,16 @@ contract Task3 with Deployable {
         else 
         {
           // self.swapAB(msg.amount, msg.from);
+          let amountOut: Int = self.jettonPrice(self.jettonAddressA) * msg.amount / self.decimal;
+          if (amountOut > self.bAmount)
+            {
+              self.sendJetton(self.jettonAddressA, msg.amount, msg.from);
+              return;
+            }
 
-          self.handleSwap(msg.amount, self.jettonAddressA, self.jettonAddressB, self.bAmount, msg.from);
-
+            self.sendJetton(self.jettonAddressB, amountOut, msg.from);
+            self.bAmount = self.bAmount - amountOut;
+            self.aAmount = self.aAmount + msg.amount;
         }
       }
       else
@@ -92,7 +99,17 @@ contract Task3 with Deployable {
         else
         {
           // self.swapBA(msg.amount, msg.from);
-          self.handleSwap(msg.amount, self.jettonAddressB, self.jettonAddressA, self.aAmount, msg.from);
+
+          let amountOut: Int = self.jettonPrice(self.jettonAddressB) * msg.amount / self.decimal;
+          if (amountOut > self.aAmount)
+          {
+              self.sendJetton(self.jettonAddressB, msg.amount, msg.from);
+              return;
+          }
+
+          self.sendJetton(self.jettonAddressA, amountOut, msg.from);
+          self.aAmount = self.aAmount - amountOut;
+          self.bAmount = self.bAmount + msg.amount;
         }
       }
   }
@@ -114,27 +131,6 @@ contract Task3 with Deployable {
           });
   }
 
-  fun handleSwap(amountIn: Int, jettonSwapFrom: Address, jettonSwapTo: Address, amountSwapTo: Int, user: Address) {
-     let amountOut: Int = self.jettonPrice(jettonSwapFrom) * amountIn / self.decimal;
-      if (amountOut > amountSwapTo)
-        {
-            self.sendJetton(jettonSwapFrom, amountIn, user);
-            return;
-        }
-
-        self.sendJetton(jettonSwapTo, amountOut, user);
-        if(jettonSwapTo == self.jettonAddressB)
-        {
-          self.aAmount = self.aAmount + amountIn;
-          self.bAmount = self.bAmount - amountOut;
-        }
-        else
-        {
-          self.bAmount = self.bAmount + amountIn;
-          self.aAmount = self.aAmount - amountOut;
-        }
-  }
-
   // fun swapBA(amountB: Int, user: Address){
   //     let amountOut: Int = self.jettonPrice(self.jettonAddressB) * amountB / self.decimal;
   //     if (amountOut > self.aAmount)
@@ -148,18 +144,18 @@ contract Task3 with Deployable {
   //       self.bAmount = self.bAmount + amountB;
   // }
 
-  //   fun swapAB(amountA: Int, user: Address){
-  //     let amountOut: Int = self.jettonPrice(self.jettonAddressA) * amountA / self.decimal;
-  //     if (amountOut > self.bAmount)
-  //       {
-  //         self.sendJetton(self.jettonAddressA, amountA, user);
-  //         return;
-  //       }
+    // fun swapAB(amountA: Int, user: Address){
+    //   let amountOut: Int = self.jettonPrice(self.jettonAddressA) * amountA / self.decimal;
+    //   if (amountOut > self.bAmount)
+    //     {
+    //       self.sendJetton(self.jettonAddressA, amountA, user);
+    //       return;
+    //     }
 
-  //       self.sendJetton(self.jettonAddressB, amountOut, user);
-  //       self.bAmount = self.bAmount - amountOut;
-  //       self.aAmount = self.aAmount + amountA;
-  //   }
+    //     self.sendJetton(self.jettonAddressB, amountOut, user);
+    //     self.bAmount = self.bAmount - amountOut;
+    //     self.aAmount = self.aAmount + amountA;
+    // }
 
   fun jettonPrice(jetton: Address): Int{
   if (jetton == self.jettonAddressA) {
