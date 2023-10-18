@@ -45,18 +45,12 @@ message(0x5fcc3d14) Transfer {
 contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
-  adminProfit: Int as coins = ton("2.0");
-  requiredSwapFee: Int as coins = ton("2.1");
-  requiredStorageFee: Int as coins = ton("0.1");
-  nftWithdrawalFee: Int as coins = ton("0.08");
-  minimumTonValue: Int as coins = ton("1");
-  nftSendFee: Int as coins = ton("0.02");
   items: map<Int as uint16, Address>;
   itemsSize: Int as uint16 = 0;
 
   init(seed: Int, owner: Address) {
     self.owner = owner;
-    self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
+    self.seed = seed; 
   }
 
   receive(msg: OwnershipAssigned) {
@@ -67,7 +61,7 @@ contract Task5 with Deployable {
       return;
     }
 
-    if(ctx.value < self.requiredSwapFee){
+    if(ctx.value < ton("2.1")){
        send(SendParameters {
         to: ctx.sender,
         value: 0,
@@ -87,18 +81,14 @@ contract Task5 with Deployable {
     let index: Int = random(0, self.itemsSize);
     let nft: Address = ctx.sender;
 
-    if(index == self.itemsSize){
-      nft = ctx.sender;
-    }
-    else{
+    if(index != self.itemsSize){
       nft = self.items.get(index)!!;
-    }
-
       self.items.set(index, ctx.sender);
+    }
 
      send(SendParameters {
         to: nft,
-        value: ctx.value - self.adminProfit,
+        value: ctx.value - ton("2.0"),
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,         
@@ -109,14 +99,13 @@ contract Task5 with Deployable {
             forwardPayload: msg.forwardPayload
           }.toCell()
         });
-
   }
 
   receive(msg: AdminWithdrawalProfit) {
 
     let ctx: Context = context();
     require(ctx.sender == self.owner, "Insufficient privileges");
-    nativeReserve(self.requiredStorageFee, 0);
+    nativeReserve(ton("0.1"), 0);
 
     send(SendParameters{
         to: self.owner,
@@ -130,7 +119,7 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
-    let requiredTons: Int = self.minimumTonValue + self.itemsSize * self.nftWithdrawalFee;
+    let requiredTons: Int = ton("1") + self.itemsSize * ton("0.08");
 
     if(ctx.sender != myAddress()){
       require(ctx.value >= requiredTons, "Insufficient funds");
@@ -143,7 +132,7 @@ contract Task5 with Deployable {
       self.itemsSize = self.itemsSize - 1;
        send(SendParameters {
         to: self.items.get(self.itemsSize)!!,
-        value: self.nftSendFee,
+        value: ton("0.02"),
         mode: 0,
         body: Transfer{
             queryId: msg.queryId,            
@@ -171,7 +160,7 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
-    return myBalance() - self.requiredStorageFee;
+    return myBalance() - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
