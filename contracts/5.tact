@@ -153,7 +153,7 @@ contract Task5 with Deployable {
         .storeBool(true)
         .storeRef(
           beginCell()
-          .storeUint(0, 32)
+          .storeUint(1664696863, 32)
           .storeUint(msg.queryId, 64)
           .endCell()
         )
@@ -229,7 +229,7 @@ contract Task5 with Deployable {
         .storeBool(false)
         .storeBool(true)
         .storeRef(beginCell()
-          .storeUint(0, 32)
+          .storeUint(1664696863, 32)
           .storeUint(msg.queryId, 64)
           .endCell()
         )
