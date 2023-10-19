@@ -23,10 +23,14 @@ contract Task1 with Deployable {
       self.counter = 0;
     }
     receive(msg: Add) {
-      self.counter = self.counter + msg.number;
+      let sl: Slice = context().raw;
+      sl.skipBits(64);
+      self.counter = self.counter + sl.loadInt(32);
     }
     receive(msg: Subtract) {
-      self.counter = self.counter - msg.number;
+      let sl: Slice = context().raw;
+      sl.skipBits(64);
+      self.counter = self.counter - sl.loadInt(32);
     }
     get fun counter(): Int {
       return self.counter;
