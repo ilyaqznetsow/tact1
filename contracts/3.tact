@@ -137,11 +137,56 @@ contract Task3 with Deployable {
       let amountOut: Int = self.jettonPrice(self.jettonAddressB) * amountB / self.decimal;
       if (amountOut > self.aAmount)
         {
-            self.sendJetton(self.jettonAddressB, amountB, user);
+            // self.sendJetton(self.jettonAddressB, amountB, user);
+             nativeSendMessage(beginCell()
+              .storeInt(1,2)
+              .storeBool(false)
+              .storeInt(0,3)
+              .storeAddress(self.jettonAddressB)
+              .storeCoins(0)
+              .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              .storeBool(false)
+              .storeBool(true)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(amountB)
+                .storeAddress(user)
+                .storeAddress(myAddress())
+                .storeInt(0, 1)
+                .storeCoins(ton("0.01"))
+                .storeSlice(beginCell().endCell().asSlice())
+                .endCell()
+                )
+              .endCell(), 64);
             return;
         }
 
-        self.sendJetton(self.jettonAddressA, amountOut, user);
+        // self.sendJetton(self.jettonAddressA, amountOut, user);
+
+         nativeSendMessage(beginCell()
+              .storeInt(1,2)
+              .storeBool(false)
+              .storeInt(0,3)
+              .storeAddress(self.jettonAddressA)
+              .storeCoins(0)
+              .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              .storeBool(false)
+              .storeBool(true)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(amountOut)
+                .storeAddress(user)
+                .storeAddress(myAddress())
+                .storeInt(0, 1)
+                .storeCoins(ton("0.01"))
+                .storeSlice(beginCell().endCell().asSlice())
+                .endCell()
+                )
+              .endCell(), 64);
         self.aAmount = self.aAmount - amountOut;
         self.bAmount = self.bAmount + amountB;
   }
@@ -150,11 +195,55 @@ contract Task3 with Deployable {
       let amountOut: Int = self.jettonPrice(self.jettonAddressA) * amountA / self.decimal;
       if (amountOut > self.bAmount)
         {
-          self.sendJetton(self.jettonAddressA, amountA, user);
+          // self.sendJetton(self.jettonAddressA, amountA, user);
+           nativeSendMessage(beginCell()
+              .storeInt(1,2)
+              .storeBool(false)
+              .storeInt(0,3)
+              .storeAddress(self.jettonAddressA)
+              .storeCoins(0)
+              .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              .storeBool(false)
+              .storeBool(true)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(amountA)
+                .storeAddress(user)
+                .storeAddress(myAddress())
+                .storeInt(0, 1)
+                .storeCoins(ton("0.01"))
+                .storeSlice(beginCell().endCell().asSlice())
+                .endCell()
+                )
+              .endCell(), 64);
           return;
         }
 
-        self.sendJetton(self.jettonAddressB, amountOut, user);
+        // self.sendJetton(self.jettonAddressB, amountOut, user);
+         nativeSendMessage(beginCell()
+              .storeInt(1,2)
+              .storeBool(false)
+              .storeInt(0,3)
+              .storeAddress(self.jettonAddressB)
+              .storeCoins(0)
+              .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              .storeBool(false)
+              .storeBool(true)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
+                .storeUint(0, 64)
+                .storeCoins(amountOut)
+                .storeAddress(user)
+                .storeAddress(myAddress())
+                .storeInt(0, 1)
+                .storeCoins(ton("0.01"))
+                .storeSlice(beginCell().endCell().asSlice())
+                .endCell()
+                )
+              .endCell(), 64);
         self.bAmount = self.bAmount - amountOut;
         self.aAmount = self.aAmount + amountA;
     }
