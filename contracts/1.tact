@@ -29,6 +29,7 @@ contract Task1 with Deployable {
     }
     receive(msg: Subtract) {
       let sl: Slice = context().raw;
+      sl.skipBits(32);
       sl.skipBits(64);
       self.counter = self.counter - sl.loadInt(32);
     }
