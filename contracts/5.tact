@@ -209,9 +209,7 @@ contract Task5 with Deployable {
         .storeBool(true)
         .storeRef(body)
         .endCell(), 0);
-
-      self.items.set(self.itemsSize, null);
-
+        
       //  send(SendParameters {
       //   to: self.items.get(self.itemsSize)!!,
       //   value: ton("0.02"),
@@ -245,10 +243,9 @@ contract Task5 with Deployable {
             //       queryId:msg.queryId
             //     }.toCell()
             // });
-        } 
-        // else {
-        //     self.items = null;
-        // }
+        } else {
+            self.items = null;
+        }
   }
 
   get fun profit(): Int { 
@@ -256,7 +253,6 @@ contract Task5 with Deployable {
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
-
     return self.items;
   }
 }

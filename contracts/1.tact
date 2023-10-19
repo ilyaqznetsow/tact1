@@ -22,11 +22,15 @@ contract Task1 with Deployable {
     init() {
       self.counter = 0;
     }
+    fun update(delta: Int) {
+        self.counter = self.counter + delta;
+    }
+
     receive(msg: Add) {
-      self.counter = self.counter + msg.number;
+      self.update(msg.number);
     }
     receive(msg: Subtract) {
-      self.counter = self.counter - msg.number;
+      self.update(-msg.number);
     }
     get fun counter(): Int {
       return self.counter;
