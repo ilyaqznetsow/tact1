@@ -105,25 +105,25 @@ contract Task3 with Deployable {
       .storeBool(false)
       .storeBool(true)
       .storeRef(
-        TokenTransfer {
-              queryId: 0,
-              amount: amount,
-              destination: user,
-              responseDestination: myAddress(),
-              customPayload: null,
-              forwardTonAmount: ton("0.01"),
-              forwardPayload: emptySlice()
-            }.toCell()
-        // beginCell()
-        // .storeUint(0xf8a7ea5, 32)
-        // .storeUint(0, 64)
-        // .storeCoins(amount)
-        // .storeAddress(sender())
-        // .storeAddress(myAddress())
-        // .storeRef(beginCell().endCell())
-        // .storeCoins(ton("0.01"))
-        // .storeSlice(beginCell().endCell().asSlice())
-        // .endCell()
+        // TokenTransfer {
+        //       queryId: 0,
+        //       amount: amount,
+        //       destination: user,
+        //       responseDestination: myAddress(),
+        //       customPayload: null,
+        //       forwardTonAmount: ton("0.01"),
+        //       forwardPayload: emptySlice()
+        //     }.toCell()
+        beginCell()
+        .storeUint(0xf8a7ea5, 32)
+        .storeUint(0, 64)
+        .storeAddress(sender())
+        .storeAddress(myAddress())
+        .storeBit(0)
+        .storeCoins(ton("0.01"))
+        .storeBit(0)
+        .storeSlice(beginCell().endCell().asSlice())
+        .endCell()
         )
       .endCell(), 64);
       // send(SendParameters{
