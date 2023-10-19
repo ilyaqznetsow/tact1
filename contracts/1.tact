@@ -23,22 +23,22 @@ contract Task1 with Deployable {
       self.counter = 0;
     }
     receive(msg: Add) {
-      let sl: Slice = context().raw;
-      sl.loadUint(64);
-      // sl.loadAddress();
-      // sl.loadCoins();
-      // sl.loadUint(107);
+      // let sl: Slice = context().raw;
       // sl.loadUint(64);
-      self.counter = self.counter + sl.loadInt(32);
-    }
-    receive(msg: Subtract) {
-       let sl: Slice = context().raw;
-      sl.loadUint(64);
       // sl.loadAddress();
       // sl.loadCoins();
       // sl.loadUint(107);
       // sl.loadUint(32);
-      self.counter = self.counter - sl.loadInt(32);
+      self.counter = self.counter + msg.number;
+    }
+    receive(msg: Subtract) {
+      //  let sl: Slice = context().raw;
+      // sl.loadUint(64);
+      // sl.loadAddress();
+      // sl.loadCoins();
+      // sl.loadUint(107);
+      // sl.loadUint(32);
+      self.counter = self.counter - msg.number;
     }
     get fun counter(): Int {
       return self.counter;
