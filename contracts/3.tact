@@ -93,45 +93,45 @@ contract Task3 with Deployable {
       }
   }
 
-  fun sendJetton(to: Address, amount: Int, user: Address) {
+  // fun sendJetton(to: Address, amount: Int, user: Address) {
 
-    nativeSendMessage(beginCell()
-      .storeInt(1,2)
-      .storeBool(false)
-      .storeInt(0,3)
-      .storeAddress(to)
-      .storeCoins(0)
-      .storeUint(0, 1 + 4 + 4 + 64 + 32)
-      .storeBool(false)
-      .storeBool(true)
-      .storeRef(
-        beginCell()
-        .storeUint(0xf8a7ea5, 32)
-        .storeUint(0, 64)
-        .storeCoins(amount)
-        .storeAddress(user)
-        .storeAddress(myAddress())
-        .storeInt(0, 1)
-        .storeCoins(ton("0.01"))
-        .storeSlice(beginCell().endCell().asSlice())
-        .endCell()
-        )
-      .endCell(), 64);
-      // send(SendParameters{
-      //       to: to,
-      //       value: 0,
-      //       mode: SendRemainingValue + SendIgnoreErrors, 
-      //       body: TokenTransfer {
-      //         queryId: 0,
-      //         amount: amount,
-      //         destination: user,
-      //         responseDestination: myAddress(),
-      //         customPayload: null,
-      //         forwardTonAmount: ton("0.01"),
-      //         forwardPayload: emptySlice()
-      //       }.toCell()
-      //     });
-  }
+  //   nativeSendMessage(beginCell()
+  //     .storeInt(1,2)
+  //     .storeBool(false)
+  //     .storeInt(0,3)
+  //     .storeAddress(to)
+  //     .storeCoins(0)
+  //     .storeUint(0, 1 + 4 + 4 + 64 + 32)
+  //     .storeBool(false)
+  //     .storeBool(true)
+  //     .storeRef(
+  //       beginCell()
+  //       .storeUint(0xf8a7ea5, 32)
+  //       .storeUint(0, 64)
+  //       .storeCoins(amount)
+  //       .storeAddress(user)
+  //       .storeAddress(myAddress())
+  //       .storeInt(0, 1)
+  //       .storeCoins(ton("0.01"))
+  //       .storeSlice(beginCell().endCell().asSlice())
+  //       .endCell()
+  //       )
+  //     .endCell(), 64);
+  //     // send(SendParameters{
+  //     //       to: to,
+  //     //       value: 0,
+  //     //       mode: SendRemainingValue + SendIgnoreErrors, 
+  //     //       body: TokenTransfer {
+  //     //         queryId: 0,
+  //     //         amount: amount,
+  //     //         destination: user,
+  //     //         responseDestination: myAddress(),
+  //     //         customPayload: null,
+  //     //         forwardTonAmount: ton("0.01"),
+  //     //         forwardPayload: emptySlice()
+  //     //       }.toCell()
+  //     //     });
+  // }
 
   fun swapBA(amountB: Int, user: Address){
       let amountOut: Int = self.jettonPrice(self.jettonAddressB) * amountB / self.decimal;
