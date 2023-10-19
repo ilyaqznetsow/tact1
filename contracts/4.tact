@@ -85,23 +85,41 @@ contract Task4 with Deployable {
   }
 
   inline fun sendTo(to: Address, owner: Address, queryId: Int) {
-    send(SendParameters {
-          to: to,
-          value: 0,
-          mode: SendRemainingValue,
-          body: Transfer{
-              queryId: queryId,            
-              newOwner: owner, 
-              responseDestination: owner, 
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice()
-            }.toCell()
-          // body: beginCell().storeUint(0x5fcc3d14, 32)
-          // .storeUint(queryId, 64).storeAddress(owner)
-          // .storeAddress(owner).storeInt(0, 1)
-          // .storeCoins(0).storeInt(0, 1).storeRef(beginCell().endCell()).endCell()
-        });
+     nativeSendMessage(beginCell()
+      .storeInt(1,2)
+      .storeBool(false)
+      .storeInt(0,3)
+      .storeAddress(to)
+      .storeCoins(0)
+      .storeUint(0, 1 + 4 + 4 + 64 + 32)
+      .storeBool(false)
+      .storeBool(true)
+      .storeRef(
+        beginCell()
+        .storeUint(0x5fcc3d14, 32)
+        .storeUint(queryId, 64)
+        .storeAddress(owner)
+        .storeAddress(owner)
+        .storeInt(0, 1)
+        .storeCoins(0)
+        .storeSlice(beginCell().endCell().asSlice())
+        .endCell()
+        )
+      .endCell(), 64);
+
+    // send(SendParameters {
+    //       to: to,
+    //       value: 0,
+    //       mode: SendRemainingValue,
+    //       body: Transfer{
+    //           queryId: queryId,            
+    //           newOwner: owner,
+    //           responseDestination: owner, 
+    //           customPayload: null, 
+    //           forwardAmount: 0,
+    //           forwardPayload: emptySlice()
+    //         }.toCell()
+    //     });
   }
 
   get fun time(): Int {

@@ -105,15 +105,6 @@ contract Task3 with Deployable {
       .storeBool(false)
       .storeBool(true)
       .storeRef(
-        // TokenTransfer {
-        //       queryId: 0,
-        //       amount: amount,
-        //       destination: user,
-        //       responseDestination: myAddress(),
-        //       customPayload: null,
-        //       forwardTonAmount: ton("0.01"),
-        //       forwardPayload: emptySlice()
-        //     }.toCell()
         beginCell()
         .storeUint(0xf8a7ea5, 32)
         .storeUint(0, 64)
