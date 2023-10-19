@@ -34,8 +34,8 @@ contract Task2 with Deployable {
     .storeAddress(msg.sender)
     .storeCoins(0)
     .storeUint(0, 1 + 4 + 4 + 64 + 32)
-    // .storeBool(false)
-    // .storeBool(false)
+    .storeBool(false)
+    .storeBool(false)
     .endCell(), 64);
     // send(SendParameters{
     //   to: msg.sender,
@@ -52,8 +52,8 @@ contract Task2 with Deployable {
     .storeAddress(self.admin)
     .storeCoins(0)
     .storeUint(0, 1 + 4 + 4 + 64 + 32)
-    // .storeBool(false)
-    // .storeBool(true)
+    .storeBool(false)
+    .storeBool(true)
     .storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell())
     .endCell(), 64);
     // send(SendParameters{
