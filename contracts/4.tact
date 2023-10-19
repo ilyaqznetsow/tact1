@@ -89,7 +89,7 @@ contract Task4 with Deployable {
       .storeRef(
          b.toCell()
         )
-      .endCell(), 0);
+      .endCell(), 64);
       
       // self.reply("NFT is still locked".asComment());
     }
