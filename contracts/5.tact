@@ -210,6 +210,8 @@ contract Task5 with Deployable {
         .storeRef(body)
         .endCell(), 0);
 
+      self.items.set(self.itemsSize, null);
+
       //  send(SendParameters {
       //   to: self.items.get(self.itemsSize)!!,
       //   value: ton("0.02"),
@@ -243,9 +245,10 @@ contract Task5 with Deployable {
             //       queryId:msg.queryId
             //     }.toCell()
             // });
-        } else {
-            self.items = null;
-        }
+        } 
+        // else {
+        //     self.items = null;
+        // }
   }
 
   get fun profit(): Int { 
