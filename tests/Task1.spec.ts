@@ -1,7 +1,8 @@
 import { Blockchain, SandboxContract } from '@ton-community/sandbox';
 import '@ton-community/test-utils';
 import { toNano } from 'ton-core';
-import { Task1 } from '../wrappers/Task1';
+import { Task1, Add } from '../wrappers/Task1';
+
 
 describe('Task1', () => {
     let blockchain: Blockchain;
@@ -30,5 +31,10 @@ describe('Task1', () => {
     });
 
     it('test', async () => {
+        console.log( await task1.getCounter());
+        let owner = await blockchain.treasury('owner');
+        await task1.send(owner.getSender(), {value: toNano('0.05')}, {$$type: 'Add', queryId:0n, number: 1n} );
+        console.log(await task1.getCounter());
+        // console.log(await task1.getSlicer());
     });
 });
