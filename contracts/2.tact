@@ -27,12 +27,21 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
     require(sender() == self.admin, "Invalid sender");
-    
-    send(SendParameters{
-      to: msg.sender,
-      value: 0,
-      mode: SendRemainingValue
-    });
+    nativeSendMessage(beginCell()
+    .storeInt(1,2)
+    .storeBool(false)
+    .storeInt(0,3)
+    .storeAddress(msg.sender)
+    .storeCoins(0)
+    .storeUint(0, 1 + 4 + 4 + 64 + 32)
+    .storeBool(false)
+    .storeBool(false)
+    .endCell(), 64);
+    // send(SendParameters{
+    //   to: msg.sender,
+    //   value: 0,
+    //   mode: SendRemainingValue
+    // });
   }
 
   receive(msg: Slice) {
