@@ -249,7 +249,7 @@ contract Task3 with Deployable {
     }
   
   get fun price(jetton: Address): Int {
-    rif (jetton == self.jettonAddressA) {
+    if (jetton == self.jettonAddressA) {
       return (self.bAmount * self.decimal) / self.aAmount;
     }
     else {
