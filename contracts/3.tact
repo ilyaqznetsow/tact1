@@ -71,8 +71,12 @@ contract Task3 with Deployable {
 
       if(sender() == self.jettonAddressA)
       {
-        if(msg.from != self.owner) 
-        {       
+        if(msg.from == self.owner) 
+        {
+          self.aAmount = self.aAmount + msg.amount;
+        }
+        else 
+        {
           let amountOut: Int = (self.bAmount * self.decimal) / self.aAmount * msg.amount / self.decimal;
           if (amountOut > self.bAmount)
             {
@@ -123,15 +127,18 @@ contract Task3 with Deployable {
                     )
                   .endCell(), 64);
             self.bAmount = self.bAmount - amountOut;
-            // self.aAmount = self.aAmount + msg.amount;
+            self.aAmount = self.aAmount + msg.amount;
             }
         }
-       self.aAmount = self.aAmount + msg.amount;
       }
       else
       {
-        if(msg.from != self.owner)
-        {                
+        if(msg.from == self.owner)
+        {
+          self.bAmount = self.bAmount + msg.amount;
+        }
+        else
+        {
           let amountOut: Int = (self.aAmount * self.decimal) / self.bAmount * msg.amount / self.decimal;
           if (amountOut > self.aAmount)
           {
@@ -183,9 +190,9 @@ contract Task3 with Deployable {
                   )
                 .endCell(), 64);
           self.aAmount = self.aAmount - amountOut;
+          self.bAmount = self.bAmount + msg.amount;
           }
         }
-         self.bAmount = self.bAmount + msg.amount;
       }
   }
   
