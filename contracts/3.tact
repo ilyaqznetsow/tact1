@@ -123,7 +123,7 @@ contract Task3 with Deployable {
                     )
                   .endCell(), 64);
             self.bAmount = self.bAmount - amountOut;
-            self.aAmount = self.aAmount + msg.amount;
+            // self.aAmount = self.aAmount + msg.amount;
             }
         }
        self.aAmount = self.aAmount + msg.amount;
