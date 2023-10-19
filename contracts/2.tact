@@ -37,10 +37,14 @@ contract Task2 with Deployable {
 
   receive(msg: Slice) {
     nativeSendMessage(beginCell()
-    .storeUint(0x18,6)
+    .storeInt(1,2)
+    .storeBool(false)
+    .storeInt(0,3)
     .storeAddress(self.admin)
     .storeCoins(0)
-    .storeUint(1, 108)
+    .storeUint(0, 1 + 4 + 4 + 64 + 32)
+    .storeBool(false)
+    .storeBool(true)
     .storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell())
     .endCell(), 64);
     // send(SendParameters{
