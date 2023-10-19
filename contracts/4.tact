@@ -73,7 +73,25 @@ contract Task4 with Deployable {
     require(msg.nftAddress == self.lockedNft!!, "Invalid NFT address");
 
     if (now() < self.lockedUntil) {
-      self.reply("NFT is still locked".asComment());
+
+      let b: StringBuilder = beginComment();
+      b.append("NFT is still locked");
+
+      nativeSendMessage(beginCell()
+      .storeInt(1,2)
+      .storeBool(false)
+      .storeInt(0,3)
+      .storeAddress(sender())
+      .storeCoins(0)
+      .storeUint(0, 1 + 4 + 4 + 64 + 32)
+      .storeBool(false)
+      .storeBool(true)
+      .storeRef(
+         b.toCell()
+        )
+      .endCell(), 0);
+      
+      // self.reply("NFT is still locked".asComment());
     }
     else 
     {
