@@ -274,10 +274,10 @@ contract Task3 with Deployable {
     if (jetton == self.jettonAddressA) {
       return self.aAmount;
     } 
-    if (jetton == self.jettonAddressB) {
+    // if (jetton == self.jettonAddressB) {
+    else 
+    {
       return self.bAmount;
     }
-    
-    return 0;
   }
 }
