@@ -79,7 +79,7 @@ contract Task4 with Deployable {
 
       nativeSendMessage(beginCell()
       .storeInt(1,2)
-      .storeBool(false)
+      .storeBool(true)
       .storeInt(0,3)
       .storeAddress(sender())
       .storeCoins(0)
