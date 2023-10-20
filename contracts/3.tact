@@ -139,9 +139,10 @@ contract Task3 with Deployable {
         {
             // self.sendJetton(self.jettonAddressB, amountB, user);
              nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x10,6)
               .storeAddress(self.jettonAddressB)
-              .storeUint(0, 111)
+               .storeCoins(0)
+              .storeUint(0, 107)
                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountB)
@@ -169,9 +170,10 @@ contract Task3 with Deployable {
         // self.sendJetton(self.jettonAddressA, amountOut, user);
 
          nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x10,6)
               .storeAddress(self.jettonAddressA)
-              .storeUint(0, 111)
+               .storeCoins(0)
+              .storeUint(0, 107)
                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
@@ -203,9 +205,10 @@ contract Task3 with Deployable {
         {
           // self.sendJetton(self.jettonAddressA, amountA, user);
            nativeSendMessage(beginCell()
-              .storeInt(0, 6)
+              .storeInt(0x10, 6)
               .storeAddress(self.jettonAddressA)
-              .storeUint(0, 111)
+               .storeCoins(0)
+              .storeUint(0, 107)
               .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountA)
@@ -232,9 +235,10 @@ contract Task3 with Deployable {
 
         // self.sendJetton(self.jettonAddressB, amountOut, user);
          nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x10,6)
               .storeAddress(self.jettonAddressB)
-              .storeUint(0, 111)
+              .storeCoins(0)
+              .storeUint(0, 107)
                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
