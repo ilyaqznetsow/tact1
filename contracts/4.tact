@@ -75,13 +75,7 @@ contract Task4 with Deployable {
     if (now() < self.lockedUntil) {
       nativeSendMessage(beginCell()
       .storeInt(0, 6)
-      // .storeBool(true)
-      // .storeInt(0,3)
       .storeAddress(sender())
-      // .storeCoins(0)
-      // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-      // .storeBool(false)
-      // .storeBool(true)
       .storeUint(1, 111)
       .storeRef(
         "NFT is still locked".asComment()
@@ -102,13 +96,7 @@ contract Task4 with Deployable {
   inline fun sendTo(to: Address, owner: Address, queryId: Int) {
      nativeSendMessage(beginCell()
       .storeInt(0, 6)
-      // .storeBool(false)
-      // .storeInt(0,3)
       .storeAddress(to)
-      // .storeCoins(0)
-      // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-      // .storeBool(false)
-      // .storeBool(true)
       .storeUint(1, 111)
       .storeRef(
         beginCell()
@@ -122,20 +110,6 @@ contract Task4 with Deployable {
         .endCell()
         )
       .endCell(), 64);
-
-    // send(SendParameters {
-    //       to: to,
-    //       value: 0,
-    //       mode: SendRemainingValue,
-    //       body: Transfer{
-    //           queryId: queryId,            
-    //           newOwner: owner,
-    //           responseDestination: owner, 
-    //           customPayload: null, 
-    //           forwardAmount: 0,
-    //           forwardPayload: emptySlice()
-    //         }.toCell()
-    //     });
   }
 
   get fun time(): Int {
