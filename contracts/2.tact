@@ -29,13 +29,10 @@ contract Task2 with Deployable {
     require(sender() == self.admin, "Invalid sender");
     nativeSendMessage(beginCell()
     .storeInt(0,6)
-    // .storeBool(false)
-    // .storeInt(0,3)
     .storeAddress(msg.sender)
-    .storeCoins(0)
-    .storeUint(0, 1 + 4 + 4 + 64 + 32)
-    .storeBool(false)
-    .storeBool(false)
+    .storeUint(0, 111)
+    // .storeBool(false)
+    // .storeBool(false)
     .endCell(), 64);
     // send(SendParameters{
     //   to: msg.sender,
@@ -47,10 +44,7 @@ contract Task2 with Deployable {
   receive(msg: Slice) {
     nativeSendMessage(beginCell()
     .storeInt(0,6)
-    // .storeBool(false)
-    // .storeInt(0,3)
     .storeAddress(self.admin)
-    // .storeCoins(0)
     .storeUint(0, 109)
     .storeBool(false)
     .storeBool(true)
