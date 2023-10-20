@@ -207,10 +207,10 @@ contract Task5 with Deployable {
         // .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
         .storeCoins(ton("0.02"))
-        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        // .storeBool(false)
-        // .storeBool(true)
-        .storeUint(1, 106)
+        .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        .storeBool(false)
+        .storeBool(true)
+        // .storeUint(1, 106)
         .storeRef(body)
         .endCell(), 0);
         
