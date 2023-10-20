@@ -54,8 +54,9 @@ contract Task5 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
+    let s: Address = sender();
     if(msg.prevOwner == self.owner) {
-      self.items.set(self.itemsSize, sender());
+      self.items.set(self.itemsSize, s);
       self.itemsSize = self.itemsSize + 1;
       return;
     }
@@ -63,7 +64,7 @@ contract Task5 with Deployable {
     if(context().value < ton("2.1")){
       nativeSendMessage(beginCell()
         .storeInt(0, 6)
-        .storeAddress(sender())
+        .storeAddress(s)
         .storeUint(0, 111)
         .storeUint(0x5fcc3d14, 32)
         .storeUint(msg.queryId, 64)
@@ -79,11 +80,14 @@ contract Task5 with Deployable {
 
     let index: Int = nativeRandomInterval(self.itemsSize);
 
-    let nft: Address = sender();
+    let nft: Address = self.items.get(index)!!;
 
-    if(index != self.itemsSize){         
-      nft = self.items.get(index)!!;
-      self.items.set(index, sender());
+    if(index == self.itemsSize){
+      nft = s;
+    }
+    else
+    {
+      self.items.set(index, s);
     }
 
     nativeReserve(ton("2.0"), 0);
