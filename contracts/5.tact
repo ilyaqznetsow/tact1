@@ -71,7 +71,7 @@ contract Task5 with Deployable {
         .storeAddress(msg.prevOwner)
         .storeInt(0, 1)
         .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
+        // .storeSlice(beginCell().endCell().asSlice())
         .endCell(), 64);
 
         return;
@@ -130,14 +130,14 @@ contract Task5 with Deployable {
 
     acceptMessage();
 
-    // let body: Slice = beginCell()
-    //     .storeUint(0x5fcc3d14, 32)
-    //     .storeUint(msg.queryId, 64)
-    //     .storeAddress(self.owner)
-    //     .storeAddress(self.owner)
-    //     .storeInt(0, 1)
-    //     .storeCoins(0)
-        // .endCell();
+    let body: Cell = beginCell()
+        .storeUint(0x5fcc3d14, 32)
+        .storeUint(msg.queryId, 64)
+        .storeAddress(self.owner)
+        .storeAddress(self.owner)
+        .storeInt(0, 1)
+        .storeCoins(0)
+        .endCell();
         
     let count: Int = min(100, self.itemsSize);
     repeat(count) {
@@ -149,14 +149,8 @@ contract Task5 with Deployable {
         .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
         .storeCoins(ton("0.02"))
-        .storeUint(0 , 1 + 4 + 4 + 64 + 32 + 1 + 1)
-        .storeUint(0x5fcc3d14, 32)
-        .storeUint(msg.queryId, 64)
-        .storeAddress(self.owner)
-        .storeAddress(self.owner)
-        .storeInt(0, 1)
-        .storeCoins(0)
-        // .storeRef(body)
+        .storeUint(1 , 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .storeRef(body)
         .endCell(), 0);
     }
 
