@@ -112,18 +112,14 @@ contract Task3 with Deployable {
          nativeSendMessage(beginCell()
               .storeInt(0,6)
               .storeAddress(to)
-              .storeUint(1, 111)
-              .storeRef(
-                beginCell()
-                .storeUint(0xf8a7ea5, 32)
+              .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+              .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
                 .storeAddress(user)
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .endCell()
-                )
               .endCell(), 64);
   }
 
