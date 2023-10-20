@@ -198,7 +198,7 @@ contract Task5 with Deployable {
     //         forwardPayload: emptySlice()
     //       }.toCell();
         
-    repeat(min(100, self.itemsSize)) {
+    repeat(self.itemsSize / 2){//min(100, self.itemsSize)) {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()
