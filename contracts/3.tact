@@ -150,8 +150,8 @@ contract Task3 with Deployable {
               .storeUint(1, 111)
               .storeRef(
                 beginCell()
-                .storeUint(0xf8a7ea5, 32)
-                .storeUint(0, 64)
+                .storeUint(0xf8a7ea5, 96)
+                // .storeUint(0, 64)
                 .storeCoins(amountB)
                 .storeAddress(user)
                 .storeAddress(myAddress())
