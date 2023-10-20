@@ -30,7 +30,7 @@ contract Task2 with Deployable {
     nativeSendMessage(beginCell()
     .storeInt(0,6)
     .storeAddress(msg.sender)
-    // .storeUint(0, 111)
+    .storeUint(0, 1)
     .endCell(), 64);
     // send(SendParameters{
     //   to: msg.sender,
