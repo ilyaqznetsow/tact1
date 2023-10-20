@@ -85,7 +85,7 @@ contract Task4 with Deployable {
       nativeSendMessage(beginCell()
       .storeInt(0, 6)
       .storeAddress(sender())
-      .storeUint(1, 111)
+      .storeUint(0, 111)
       // .storeRef(
       //   "NFT is still locked".asComment()
       //   )
