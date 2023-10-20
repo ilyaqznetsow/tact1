@@ -82,46 +82,99 @@ contract Task3 with Deployable {
       }
       else
       {
-        if(msg.from == self.owner)
-        {
-          self.bAmount = self.bAmount + msg.amount;
+        if(msg.from != self.owner)
+        {      
+          // self.swapBA(msg.amount, msg.from);
+          let amountOut: Int = (self.aAmount * self.decimal) / self.bAmount * msg.amount / self.decimal;
+          if (amountOut > self.aAmount)
+          {
+              nativeSendMessage(beginCell()
+                .storeInt(0,6)
+                .storeAddress(self.jettonAddressB)
+                .storeUint(1, 111)
+                .storeRef(
+                  beginCell()
+                  .storeUint(0xf8a7ea5, 32)
+                  .storeUint(0, 64)
+                  .storeCoins(msg.amount)
+                  .storeAddress(msg.from)
+                  .storeAddress(myAddress())
+                  .storeInt(0, 1)
+                  .storeCoins(ton("0.01"))
+                  .endCell()
+                  )
+                .endCell(), 64);
+                return;
+          }
+          
+          nativeSendMessage(beginCell()
+                .storeInt(0,6)
+                .storeAddress(self.jettonAddressA)
+                .storeUint(1, 111)
+                .storeRef(
+                  beginCell()
+                  .storeUint(0xf8a7ea5, 32)
+                  .storeUint(0, 64)
+                  .storeCoins(amountOut)
+                  .storeAddress(msg.from)
+                  .storeAddress(myAddress())
+                  .storeInt(0, 1)
+                  .storeCoins(ton("0.01"))
+                  .endCell()
+                  )
+                .endCell(), 64);
+                
+          self.aAmount = self.aAmount - amountOut;
         }
-        else
-        {
-          self.swapBA(msg.amount, msg.from);
-        }
+        self.bAmount = self.bAmount + msg.amount;
+
       }
   }
 
-  fun swapBA(amountB: Int, user: Address){
-      let amountOut: Int = (self.aAmount * self.decimal) / self.bAmount * amountB / self.decimal;
-      let to: Address = self.jettonAddressB;
-
-      if (amountOut > self.aAmount)
-        {
-          amountOut = amountB;            
-        }
-        else
-        {
-          to = self.jettonAddressA;
-
-          self.aAmount = self.aAmount - amountOut;
-          self.bAmount = self.bAmount + amountB;
-        }
-
-         nativeSendMessage(beginCell()
-              .storeInt(0,6)
-              .storeAddress(to)
-              .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 4)
-              .storeUint(0xf8a7ea5, 32)
-                .storeUint(0, 64)
-                .storeCoins(amountOut)
-                .storeAddress(user)
-                .storeAddress(myAddress())
-                .storeInt(0, 1)
-                .storeCoins(ton("0.01"))
-              .endCell(), 64);
-  }
+  // fun swapBA(amountB: Int, user: Address){
+  //     let amountOut: Int = (self.aAmount * self.decimal) / self.bAmount * amountB / self.decimal;
+  //     if (amountOut > self.aAmount)
+  //       {
+  //            nativeSendMessage(beginCell()
+  //             .storeInt(0,6)
+  //             .storeAddress(self.jettonAddressB)
+  //             .storeUint(1, 111)
+  //             .storeRef(
+  //               beginCell()
+  //               .storeUint(0xf8a7ea5, 32)
+  //               .storeUint(0, 64)
+  //               .storeCoins(amountB)
+  //               .storeAddress(user)
+  //               .storeAddress(myAddress())
+  //               .storeInt(0, 1)
+  //               .storeCoins(ton("0.01"))
+  //               .endCell()
+  //               )
+  //             .endCell(), 64);
+  //       }
+  //       else
+  //       {
+  //        nativeSendMessage(beginCell()
+  //             .storeInt(0,6)
+  //             .storeAddress(self.jettonAddressA)
+  //             .storeUint(1, 111)
+  //             .storeRef(
+  //               beginCell()
+  //               .storeUint(0xf8a7ea5, 32)
+  //               .storeUint(0, 64)
+  //               .storeCoins(amountOut)
+  //               .storeAddress(user)
+  //               .storeAddress(myAddress())
+  //               .storeInt(0, 1)
+  //               .storeCoins(ton("0.01"))
+  //               .endCell()
+  //               )
+  //             .endCell(), 64);
+              
+  //       self.aAmount = self.aAmount - amountOut;
+  //       self.bAmount = self.bAmount + amountB;
+  //       }
+  // }
 
     fun swapAB(amountA: Int, user: Address){
       let amountOut: Int = (self.bAmount * self.decimal) / self.aAmount * amountA / self.decimal;
