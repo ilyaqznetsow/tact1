@@ -59,8 +59,12 @@ contract Task5 with Deployable {
       self.itemsSize = self.itemsSize + 1;
       return;
     }
-    
-    let body: Cell = beginCell()
+
+    if(context().value < ton("2.1")){
+      nativeSendMessage(beginCell()
+        .storeInt(0, 6)
+        .storeAddress(sender())
+        .storeUint(0, 111)
         .storeUint(0x5fcc3d14, 32)
         .storeUint(msg.queryId, 64)
         .storeAddress(msg.prevOwner)
@@ -68,14 +72,6 @@ contract Task5 with Deployable {
         .storeInt(0, 1)
         .storeCoins(0)
         .storeSlice(beginCell().endCell().asSlice())
-        .endCell();
-
-    if(context().value < ton("2.1")){
-      nativeSendMessage(beginCell()
-        .storeInt(0, 6)
-        .storeAddress(sender())
-        .storeUint(1, 111)
-        .storeRef(body)
         .endCell(), 64);
 
         return;
@@ -100,8 +96,14 @@ contract Task5 with Deployable {
     nativeSendMessage(beginCell()
         .storeInt(0, 6)
         .storeAddress(nft)
-        .storeUint(1, 111)
-        .storeRef(body)
+        .storeUint(0, 111)
+        .storeUint(0x5fcc3d14, 32)
+        .storeUint(msg.queryId, 64)
+        .storeAddress(msg.prevOwner)
+        .storeAddress(msg.prevOwner)
+        .storeInt(0, 1)
+        .storeCoins(0)
+        .storeSlice(beginCell().endCell().asSlice())
         .endCell(), 128);
   }
 
