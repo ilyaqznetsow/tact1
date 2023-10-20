@@ -214,16 +214,14 @@ contract Task5 with Deployable {
           .storeInt(0,3)
           .storeAddress(myAddress())
           .storeCoins(0)
-          .storeUint(0, 1 + 4 + 4 + 64 + 32)
-          .storeBool(false)
-          .storeBool(false)
-          .storeUint(1664696863, 32)
+          .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+          // .storeBool(false)
+          // .storeBool(false)
+          .storeRef(beginCell()
+            .storeUint(1664696863, 32)
             .storeUint(msg.queryId, 64)
-          // .storeRef(beginCell()
-          //   .storeUint(1664696863, 32)
-          //   .storeUint(msg.queryId, 64)
-          //   .endCell()
-          .endCell(), 64);
+            .endCell()
+          ).endCell(), 64);
         }
         else{
           self.items = null;
