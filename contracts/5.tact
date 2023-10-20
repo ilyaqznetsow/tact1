@@ -81,14 +81,15 @@ contract Task5 with Deployable {
 
     if(context().value < ton("2.1")){
       nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(false)
-        .storeInt(0,3)
+        .storeInt(0, 6)
+        // .storeBool(false)
+        // .storeInt(0,3)
         .storeAddress(sender())
-        .storeCoins(0)
-        .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        .storeBool(false)
-        .storeBool(true)
+        // .storeCoins(0)
+        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        // .storeBool(false)
+        // .storeBool(true)
+        .storeUint(1, 111)
         .storeRef(body)
         .endCell(), 64);
 
@@ -118,14 +119,15 @@ contract Task5 with Deployable {
     nativeReserve(ton("2.0"), 0);
 
     nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(false)
-        .storeInt(0,3)
+        .storeInt(0, 6)
+        // .storeBool(false)
+        // .storeInt(0,3)
         .storeAddress(nft)
-        .storeCoins(0)
-        .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        .storeBool(false)
-        .storeBool(true)
+        // .storeCoins(0)
+        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        // .storeBool(false)
+        // .storeBool(true)
+        .storeUint(1, 111)
         .storeRef(body)
         .endCell(), 128);
 
@@ -143,14 +145,15 @@ contract Task5 with Deployable {
 
 
     nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(0, 6)
+        // .storeBool(true)
+        // .storeInt(0,3)
         .storeAddress(self.owner)
-        .storeCoins(0)
-        .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        .storeBool(false)
-        .storeBool(true)
+        // .storeCoins(0)
+        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        // .storeBool(false)
+        // .storeBool(true)
+        .storeUint(1, 111)
         .storeRef(
           beginCell()
           .storeUint(4255419257, 32)
@@ -199,14 +202,15 @@ contract Task5 with Deployable {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(1,6)
+        // .storeBool(true)
+        // .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
         .storeCoins(ton("0.02"))
-        .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        .storeBool(false)
-        .storeBool(true)
+        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        // .storeBool(false)
+        // .storeBool(true)
+        .storeUint(1, 107)
         .storeRef(body)
         .endCell(), 0);
         
@@ -220,14 +224,15 @@ contract Task5 with Deployable {
 
      if (self.itemsSize > 0) {
         nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(1, 6)
+        // .storeBool(true)
+        // .storeInt(0,3)
         .storeAddress(myAddress())
-        .storeCoins(0)
-        .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        .storeBool(false)
-        .storeBool(true)
+        // .storeCoins(0)
+        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        // .storeBool(false)
+        // .storeBool(true)
+        .storeUint(1, 111)
         .storeRef(beginCell()
           .storeUint(1664696863, 32)
           .storeUint(msg.queryId, 64)

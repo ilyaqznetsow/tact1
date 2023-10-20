@@ -70,18 +70,19 @@ contract Task4 with Deployable {
 
   receive(msg: NftWithdrawal) {
     require(sender() == self.nftOwner, "Invalid sender");
-    require(msg.nftAddress == self.lockedNft!!, "Invalid NFT address");
+    nativeThrowUnless(123, msg.nftAddress == self.lockedNft!!);//, "Invalid NFT address");
 
     if (now() < self.lockedUntil) {
       nativeSendMessage(beginCell()
-      .storeInt(1,2)
-      .storeBool(true)
-      .storeInt(0,3)
+      .storeInt(0, 6)
+      // .storeBool(true)
+      // .storeInt(0,3)
       .storeAddress(sender())
-      .storeCoins(0)
-      .storeUint(0, 1 + 4 + 4 + 64 + 32)
-      .storeBool(false)
-      .storeBool(true)
+      // .storeCoins(0)
+      // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+      // .storeBool(false)
+      // .storeBool(true)
+      .storeUint(1, 111)
       .storeRef(
         "NFT is still locked".asComment()
         )
@@ -100,14 +101,15 @@ contract Task4 with Deployable {
 
   inline fun sendTo(to: Address, owner: Address, queryId: Int) {
      nativeSendMessage(beginCell()
-      .storeInt(1,2)
-      .storeBool(false)
-      .storeInt(0,3)
+      .storeInt(0, 6)
+      // .storeBool(false)
+      // .storeInt(0,3)
       .storeAddress(to)
-      .storeCoins(0)
-      .storeUint(0, 1 + 4 + 4 + 64 + 32)
-      .storeBool(false)
-      .storeBool(true)
+      // .storeCoins(0)
+      // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+      // .storeBool(false)
+      // .storeBool(true)
+      .storeUint(1, 111)
       .storeRef(
         beginCell()
         .storeUint(0x5fcc3d14, 32)
