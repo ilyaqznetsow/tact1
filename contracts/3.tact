@@ -100,9 +100,7 @@ contract Task3 with Deployable {
              nativeSendMessage(beginCell()
               .storeInt(0,6)
               .storeAddress(self.jettonAddressB)
-              .storeUint(1, 111)
-              .storeRef(
-                beginCell()
+              .storeUint(0, 111)
                 .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountB)
@@ -110,8 +108,17 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .endCell()
-                )
+              // .storeRef(
+              //   beginCell()
+              //   .storeUint(0xf8a7ea5, 32)
+              //   .storeUint(0, 64)
+              //   .storeCoins(amountB)
+              //   .storeAddress(user)
+              //   .storeAddress(myAddress())
+              //   .storeInt(0, 1)
+              //   .storeCoins(ton("0.01"))
+              //   .endCell()
+              //   )
               .endCell(), 64);
             return;
         }
