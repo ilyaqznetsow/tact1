@@ -180,15 +180,15 @@ contract Task5 with Deployable {
 
     acceptMessage();
 
-    let body: Slice = beginCell()
-        .storeUint(0x5fcc3d14, 32)
-        .storeUint(msg.queryId, 64)
-        .storeAddress(self.owner)
-        .storeAddress(self.owner)
-        .storeInt(0, 1)
-        .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
-        .endCell().asSlice();
+    // let body: Slice = beginCell()
+    //     .storeUint(0x5fcc3d14, 32)
+    //     .storeUint(msg.queryId, 64)
+    //     .storeAddress(self.owner)
+    //     .storeAddress(self.owner)
+    //     .storeInt(0, 1)
+    //     .storeCoins(0)
+    //     .storeSlice(beginCell().endCell().asSlice())
+    //     .endCell().asSlice();
     // let body: Cell = Transfer{
     //         queryId: msg.queryId,            
     //         newOwner: self.owner, 
@@ -210,7 +210,13 @@ contract Task5 with Deployable {
         .storeUint(0, 1 + 4 + 4 + 64 + 32)
         .storeBool(false)
         .storeBool(false)
-        .storeSlice(body)
+        .storeUint(0x5fcc3d14, 32)
+        .storeUint(msg.queryId, 64)
+        .storeAddress(self.owner)
+        .storeAddress(self.owner)
+        .storeInt(0, 1)
+        .storeCoins(0)
+        .storeSlice(beginCell().endCell().asSlice())
         // .storeUint(1, 106)
         // .storeRef(body)
         .endCell(), 0);
