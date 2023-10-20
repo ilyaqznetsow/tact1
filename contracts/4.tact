@@ -83,9 +83,9 @@ contract Task4 with Deployable {
     nativeThrowUnless(123, msg.nftAddress == self.lockedNft!!);//, "Invalid NFT address");
     if (now() < self.lockedUntil) {
       nativeSendMessage(beginCell()
-      .storeInt(0, 6)
+      .storeInt(0x10, 6)
       .storeAddress(sender())
-      .storeUint(0, 139)
+      .storeUint(0, 143)
       // .storeRef(
       //   "NFT is still locked".asComment()
       //   )
