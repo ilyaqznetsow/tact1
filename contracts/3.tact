@@ -98,7 +98,7 @@ contract Task3 with Deployable {
       if (amountOut > self.aAmount)
         {
              nativeSendMessage(beginCell()
-              .storeInt(0x18,6)
+              .storeInt(0,6)
               .storeAddress(self.jettonAddressB)
               .storeUint(0, 111)
                 .storeUint(0xf8a7ea5, 32)
@@ -107,22 +107,27 @@ contract Task3 with Deployable {
                 .storeAddress(user)
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
-                .storeCoins(ton("0.01"))            
+                .storeCoins(ton("0.01"))
+            
               .endCell(), 64);
             return;
         }
 
          nativeSendMessage(beginCell()
-              .storeInt(0x18,6)
+              .storeInt(0,6)
               .storeAddress(self.jettonAddressA)
-              .storeUint(0, 111)
-              .storeUint(0xf8a7ea5, 32)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
                 .storeAddress(user)
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
+                .endCell()
+                )
               .endCell(), 64);
         self.aAmount = self.aAmount - amountOut;
         self.bAmount = self.bAmount + amountB;
@@ -133,10 +138,10 @@ contract Task3 with Deployable {
       if (amountOut > self.bAmount)
         {
            nativeSendMessage(beginCell()
-              .storeInt(0x18, 6)
+              .storeInt(0, 6)
               .storeAddress(self.jettonAddressA)
               .storeUint(0, 111)
-             .storeUint(0xf8a7ea5, 32)
+              .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountA)
                 .storeAddress(user)
@@ -148,16 +153,20 @@ contract Task3 with Deployable {
         }
 
          nativeSendMessage(beginCell()
-              .storeInt(0x18,6)
+              .storeInt(0,6)
               .storeAddress(self.jettonAddressB)
-              .storeUint(0, 111)
-              .storeUint(0xf8a7ea5, 32)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
                 .storeAddress(user)
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
+                .endCell()
+                )
               .endCell(), 64);
         self.bAmount = self.bAmount - amountOut;
         self.aAmount = self.aAmount + amountA;
