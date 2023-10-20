@@ -145,7 +145,7 @@ contract Task5 with Deployable {
 
 
     nativeSendMessage(beginCell()
-        .storeInt(0, 6)
+        .storeInt(1, 6)
         // .storeBool(true)
         // .storeInt(0,3)
         .storeAddress(self.owner)
