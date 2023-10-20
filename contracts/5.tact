@@ -102,7 +102,7 @@ contract Task5 with Deployable {
         .storeAddress(msg.prevOwner)
         .storeInt(0, 1)
         .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
+        // .storeSlice(beginCell().endCell().asSlice())
         .endCell(), 128);
   }
 
@@ -139,7 +139,7 @@ contract Task5 with Deployable {
         .storeAddress(self.owner)
         .storeInt(0, 1)
         .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
+        // .storeSlice(beginCell().endCell().asSlice())
         .endCell();
         
     let count: Int = min(100, self.itemsSize);

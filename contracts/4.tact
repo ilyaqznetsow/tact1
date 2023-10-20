@@ -69,18 +69,6 @@ contract Task4 with Deployable {
         .storeAddress(msg.prevOwner)
         .storeInt(0, 1)
         .storeCoins(0)
-        // .storeSlice(beginCell().endCell().asSlice())
-      // .storeRef(
-      //   beginCell()
-      //   .storeUint(0x5fcc3d14, 32)
-      //   .storeUint(msg.queryId, 64)
-      //   .storeAddress(msg.prevOwner)
-      //   .storeAddress(msg.prevOwner)
-      //   .storeInt(0, 1)
-      //   .storeCoins(0)
-      //   .storeSlice(beginCell().endCell().asSlice())
-      //   .endCell()
-      //   )
       .endCell(), 64);
     }
     else {
@@ -115,18 +103,6 @@ contract Task4 with Deployable {
         .storeAddress(self.nftOwner!!)
         .storeInt(0, 1)
         .storeCoins(0)
-        // .storeSlice(beginCell().endCell().asSlice())
-      // .storeRef(
-      //   beginCell()
-      //   .storeUint(0x5fcc3d14, 32)
-      //   .storeUint( msg.queryId, 64)
-      //   .storeAddress(self.nftOwner!!)
-      //   .storeAddress(self.nftOwner!!)
-      //   .storeInt(0, 1)
-      //   .storeCoins(0)
-      //   .storeSlice(beginCell().endCell().asSlice())
-      //   .endCell()
-      //   )
       .endCell(), 64);
 
       self.lockedNft = null;

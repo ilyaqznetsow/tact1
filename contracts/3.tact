@@ -157,7 +157,7 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .storeSlice(beginCell().endCell().asSlice())
+                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
@@ -185,7 +185,7 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .storeSlice(beginCell().endCell().asSlice())
+                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
@@ -217,7 +217,7 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .storeSlice(beginCell().endCell().asSlice())
+                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
@@ -244,7 +244,7 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                .storeSlice(beginCell().endCell().asSlice())
+                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
