@@ -67,7 +67,7 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    require(sender() == self.jettonAddressA || sender() == self.jettonAddressB, "Wrong jetton");
+    nativeThrowUnless(123, sender() == self.jettonAddressA || sender() == self.jettonAddressB);
 
       if(sender() == self.jettonAddressA)
       {
@@ -139,14 +139,15 @@ contract Task3 with Deployable {
         {
             // self.sendJetton(self.jettonAddressB, amountB, user);
              nativeSendMessage(beginCell()
-              .storeInt(1,2)
-              .storeBool(false)
-              .storeInt(0,3)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-              .storeCoins(0)
-              .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              .storeBool(false)
-              .storeBool(true)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
               .storeRef(
                 beginCell()
                 .storeUint(0xf8a7ea5, 32)
@@ -166,14 +167,15 @@ contract Task3 with Deployable {
         // self.sendJetton(self.jettonAddressA, amountOut, user);
 
          nativeSendMessage(beginCell()
-              .storeInt(1,2)
-              .storeBool(false)
-              .storeInt(0,3)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-              .storeCoins(0)
-              .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              .storeBool(false)
-              .storeBool(true)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
               .storeRef(
                 beginCell()
                 .storeUint(0xf8a7ea5, 32)
@@ -197,14 +199,15 @@ contract Task3 with Deployable {
         {
           // self.sendJetton(self.jettonAddressA, amountA, user);
            nativeSendMessage(beginCell()
-              .storeInt(1,2)
-              .storeBool(false)
-              .storeInt(0,3)
+              .storeInt(0, 6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-              .storeCoins(0)
-              .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              .storeBool(false)
-              .storeBool(true)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
               .storeRef(
                 beginCell()
                 .storeUint(0xf8a7ea5, 32)
@@ -223,14 +226,15 @@ contract Task3 with Deployable {
 
         // self.sendJetton(self.jettonAddressB, amountOut, user);
          nativeSendMessage(beginCell()
-              .storeInt(1,2)
-              .storeBool(false)
-              .storeInt(0,3)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-              .storeCoins(0)
-              .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              .storeBool(false)
-              .storeBool(true)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
               .storeRef(
                 beginCell()
                 .storeUint(0xf8a7ea5, 32)
