@@ -223,6 +223,9 @@ contract Task5 with Deployable {
             .endCell()
           ).endCell(), 64);
         }
+        else{
+          self.items = null;
+        }
   }
 
   get fun profit(): Int { 
