@@ -130,16 +130,17 @@ contract Task5 with Deployable {
 
     acceptMessage();
 
-    let body: Cell = beginCell()
+    let body: Slice = beginCell()
         .storeUint(0x5fcc3d14, 32)
         .storeUint(msg.queryId, 64)
         .storeAddress(self.owner)
         .storeAddress(self.owner)
         .storeInt(0, 1)
         .storeCoins(0)
-        .endCell();
+        .asSlice();
+        // .endCell();
         
-    let count: Int = min(254, self.itemsSize);
+    let count: Int = min(100, self.itemsSize);
     repeat(count) {
       self.itemsSize = self.itemsSize - 1;
 
@@ -149,8 +150,9 @@ contract Task5 with Deployable {
         .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
         .storeCoins(ton("0.02"))
-        .storeUint(1 , 1 + 4 + 4 + 64 + 32 + 1 + 1)
-        .storeRef(body)
+        .storeUint(0 , 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        // .storeRef(body)
+        .storeSlice(body)
         .endCell(), 0);
     }
 
