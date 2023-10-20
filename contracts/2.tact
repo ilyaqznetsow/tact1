@@ -32,11 +32,6 @@ contract Task2 with Deployable {
     .storeAddress(msg.sender)
     .storeUint(0, 111)
     .endCell(), 64);
-    // send(SendParameters{
-    //   to: msg.sender,
-    //   value: 0,
-    //   mode: SendRemainingValue
-    // });
   }
 
   receive(msg: Slice) {
@@ -47,11 +42,5 @@ contract Task2 with Deployable {
     .storeRef(msg.asCell())
     .storeAddress(sender())
     .endCell(), 64);
-    // send(SendParameters{
-    //   to: self.admin,
-    //   value: 0,
-    //   mode: SendRemainingValue,
-    //   body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
-    // });
   }
 }
