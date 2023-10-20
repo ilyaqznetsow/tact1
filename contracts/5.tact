@@ -198,7 +198,7 @@ contract Task5 with Deployable {
     //         forwardPayload: emptySlice()
     //       }.toCell();
         
-    repeat(self.itemsSize / 2){//min(100, self.itemsSize)) {
+    repeat(min(100, self.itemsSize)) {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()
@@ -206,7 +206,7 @@ contract Task5 with Deployable {
         .storeBool(true)
         .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
-        .storeCoins(ton("0.04"))
+        .storeCoins(ton("0.02"))
         .storeUint(0, 1 + 4 + 4 + 64 + 32)
         .storeBool(false)
         .storeBool(true)
@@ -231,13 +231,15 @@ contract Task5 with Deployable {
         .storeCoins(0)
         .storeUint(0, 1 + 4 + 4 + 64 + 32)
         .storeBool(false)
-        .storeBool(true)
+        .storeBool(false)
         // .storeUint(1, 111)
-        .storeRef(beginCell()
-          .storeUint(1664696863, 32)
-          .storeUint(msg.queryId, 64)
-          .endCell()
-        )
+        // .storeRef(beginCell()
+        //   .storeUint(1664696863, 32)
+        //   .storeUint(msg.queryId, 64)
+        //   .endCell()
+        // )
+        .storeUint(1664696863, 32)
+        .storeUint(msg.queryId, 64)
         .endCell(), 64);
 
             // send(SendParameters{
