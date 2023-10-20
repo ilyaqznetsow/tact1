@@ -98,7 +98,7 @@ contract Task3 with Deployable {
       if (amountOut > self.aAmount)
         {
              nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x18,6)
               .storeAddress(self.jettonAddressB)
               .storeUint(0, 111)
                 .storeUint(0xf8a7ea5, 32)
@@ -113,7 +113,7 @@ contract Task3 with Deployable {
         }
 
          nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x18,6)
               .storeAddress(self.jettonAddressA)
               .storeUint(0, 111)
               .storeUint(0xf8a7ea5, 32)
@@ -133,7 +133,7 @@ contract Task3 with Deployable {
       if (amountOut > self.bAmount)
         {
            nativeSendMessage(beginCell()
-              .storeInt(0, 6)
+              .storeInt(0x18, 6)
               .storeAddress(self.jettonAddressA)
               .storeUint(0, 111)
              .storeUint(0xf8a7ea5, 32)
@@ -148,7 +148,7 @@ contract Task3 with Deployable {
         }
 
          nativeSendMessage(beginCell()
-              .storeInt(0,6)
+              .storeInt(0x18,6)
               .storeAddress(self.jettonAddressB)
               .storeUint(0, 111)
               .storeUint(0xf8a7ea5, 32)
