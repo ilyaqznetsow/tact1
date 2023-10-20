@@ -30,9 +30,7 @@ contract Task2 with Deployable {
     nativeSendMessage(beginCell()
     .storeInt(0,6)
     .storeAddress(msg.sender)
-    .storeUint(0, 111)
-    // .storeBool(false)
-    // .storeBool(false)
+    // .storeUint(0, 111)
     .endCell(), 64);
     // send(SendParameters{
     //   to: msg.sender,
@@ -46,8 +44,6 @@ contract Task2 with Deployable {
     .storeInt(0,6)
     .storeAddress(self.admin)
     .storeUint(1, 111)
-    // .storeBool(false)
-    // .storeBool(true)
     .storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell())
     .endCell(), 64);
     // send(SendParameters{
