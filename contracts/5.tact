@@ -110,9 +110,7 @@ contract Task5 with Deployable {
 
 
     nativeSendMessage(beginCell()
-        .storeInt(1, 2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(0x18, 6)
         .storeAddress(self.owner)
         .storeCoins(0)
         .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
@@ -144,9 +142,7 @@ contract Task5 with Deployable {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()
-        .storeInt(1,2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(0x18, 6)
         .storeAddress(self.items.get(self.itemsSize)!!)
         .storeCoins(ton("0.02"))
         .storeUint(1 , 1 + 4 + 4 + 64 + 32 + 1 + 1)
@@ -156,9 +152,9 @@ contract Task5 with Deployable {
 
      if (self.itemsSize > 0) {
         nativeSendMessage(beginCell()
-        .storeInt(1, 2)
-        .storeBool(true)
-        .storeInt(0,3)
+        .storeInt(0x18, 6)
+        // .storeBool(true)
+        // .storeInt(0,3)
         .storeAddress(myAddress())
         .storeCoins(0)
         .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
