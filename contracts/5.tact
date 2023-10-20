@@ -206,7 +206,7 @@ contract Task5 with Deployable {
         .storeBool(true)
         .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
-        .storeCoins(ton("0.08"))
+        .storeCoins(ton("0.04"))
         .storeUint(0, 1 + 4 + 4 + 64 + 32)
         .storeBool(false)
         .storeBool(true)
