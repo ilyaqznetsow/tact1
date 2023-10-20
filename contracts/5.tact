@@ -145,15 +145,15 @@ contract Task5 with Deployable {
 
 
     nativeSendMessage(beginCell()
-        .storeInt(1, 6)
-        // .storeBool(true)
-        // .storeInt(0,3)
+        .storeInt(1, 2)
+        .storeBool(true)
+        .storeInt(0,3)
         .storeAddress(self.owner)
-        // .storeCoins(0)
-        // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-        // .storeBool(false)
-        // .storeBool(true)
-        .storeUint(1, 111)
+        .storeCoins(0)
+        .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        .storeBool(false)
+        .storeBool(true)
+        // .storeUint(1, 111)
         .storeRef(
           beginCell()
           .storeUint(4255419257, 32)
