@@ -119,13 +119,7 @@ contract Task5 with Deployable {
         .storeCoins(0)
         .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
         .storeUint(4255419257, 32)
-          .storeUint(msg.queryId, 64)
-        // .storeRef(
-        //   beginCell()
-        //   .storeUint(4255419257, 32)
-        //   .storeUint(msg.queryId, 64)
-        //   .endCell()
-        // )
+        .storeUint(msg.queryId, 64)
         .endCell(), 128);
 
   }
@@ -148,7 +142,8 @@ contract Task5 with Deployable {
         .storeSlice(beginCell().endCell().asSlice())
         .endCell();
         
-    repeat(min(100, self.itemsSize)) {
+    let count: Int = min(100, self.itemsSize);
+    repeat(count) {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()

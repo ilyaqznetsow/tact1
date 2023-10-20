@@ -59,7 +59,22 @@ contract Task4 with Deployable {
 
   receive(msg: OwnershipAssigned) {    
     if (self.lockedNft != null) {
-      self.sendTo(sender(), msg.prevOwner, msg.queryId);     
+       nativeSendMessage(beginCell()
+      .storeInt(0, 6)
+      .storeAddress(sender())
+      .storeUint(1, 111)
+      .storeRef(
+        beginCell()
+        .storeUint(0x5fcc3d14, 32)
+        .storeUint(msg.queryId, 64)
+        .storeAddress(msg.prevOwner)
+        .storeAddress(msg.prevOwner)
+        .storeInt(0, 1)
+        .storeCoins(0)
+        .storeSlice(beginCell().endCell().asSlice())
+        .endCell()
+        )
+      .endCell(), 64);
     }
     else {
       self.lockedNft = sender();
@@ -81,35 +96,29 @@ contract Task4 with Deployable {
         "NFT is still locked".asComment()
         )
       .endCell(), 64);
-      
-      // self.reply("NFT is still locked".asComment());
     }
     else 
     {
-      self.sendTo(self.lockedNft!!, self.nftOwner!!, msg.queryId);
-
-      self.lockedNft = null;
-      self.nftOwner = null;
-    }
-  }
-
-  inline fun sendTo(to: Address, owner: Address, queryId: Int) {
-     nativeSendMessage(beginCell()
+      nativeSendMessage(beginCell()
       .storeInt(0, 6)
-      .storeAddress(to)
+      .storeAddress(self.lockedNft!!)
       .storeUint(1, 111)
       .storeRef(
         beginCell()
         .storeUint(0x5fcc3d14, 32)
-        .storeUint(queryId, 64)
-        .storeAddress(owner)
-        .storeAddress(owner)
+        .storeUint( msg.queryId, 64)
+        .storeAddress(self.nftOwner!!)
+        .storeAddress(self.nftOwner!!)
         .storeInt(0, 1)
         .storeCoins(0)
         .storeSlice(beginCell().endCell().asSlice())
         .endCell()
         )
       .endCell(), 64);
+
+      self.lockedNft = null;
+      self.nftOwner = null;
+    }
   }
 
   get fun time(): Int {
