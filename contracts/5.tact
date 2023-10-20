@@ -190,7 +190,7 @@ contract Task5 with Deployable {
         .storeSlice(beginCell().endCell().asSlice())
         .endCell();
 
-    repeat(self.itemsSize){//min(100, self.itemsSize)) {
+    repeat(min(100, self.itemsSize)) {
       self.itemsSize = self.itemsSize - 1;
 
     nativeSendMessage(beginCell()
