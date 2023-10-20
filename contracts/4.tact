@@ -86,9 +86,6 @@ contract Task4 with Deployable {
       .storeInt(0x10, 6)
       .storeAddress(sender())
       .storeUint(0, 143)
-      // .storeRef(
-      //   "NFT is still locked".asComment()
-      //   )
       .storeUint(1745584612302255264536575227224246465199826276, 152)
       .endCell(), 64);
     }
@@ -98,12 +95,12 @@ contract Task4 with Deployable {
       .storeInt(0, 6)
       .storeAddress(self.lockedNft!!)
       .storeUint(0, 111)
-       .storeUint(0x5fcc3d14, 32)
-        .storeUint( msg.queryId, 64)
-        .storeAddress(self.nftOwner!!)
-        .storeAddress(self.nftOwner!!)
-        .storeInt(0, 1)
-        .storeCoins(0)
+      .storeUint(0x5fcc3d14, 32)
+      .storeUint( msg.queryId, 64)
+      .storeAddress(self.nftOwner!!)
+      .storeAddress(self.nftOwner!!)
+      .storeInt(0, 1)
+      .storeCoins(0)
       .endCell(), 64);
 
       self.lockedNft = null;

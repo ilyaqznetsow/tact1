@@ -77,7 +77,6 @@ contract Task5 with Deployable {
         return;
     }   
 
-    // nativePrepareRandom();
     let index: Int = nativeRandomInterval(self.itemsSize);
 
     let nft: Address = self.items.get(index)!!;
@@ -102,7 +101,6 @@ contract Task5 with Deployable {
         .storeAddress(msg.prevOwner)
         .storeInt(0, 1)
         .storeCoins(0)
-        // .storeSlice(beginCell().endCell().asSlice())
         .endCell(), 128);
   }
 
@@ -139,10 +137,9 @@ contract Task5 with Deployable {
         .storeAddress(self.owner)
         .storeInt(0, 1)
         .storeCoins(0)
-        // .storeSlice(beginCell().endCell().asSlice())
         .endCell();
         
-    let count: Int = min(100, self.itemsSize);
+    let count: Int = min(254, self.itemsSize);
     repeat(count) {
       self.itemsSize = self.itemsSize - 1;
 
