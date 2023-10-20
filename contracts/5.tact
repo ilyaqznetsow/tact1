@@ -210,7 +210,7 @@ contract Task5 with Deployable {
         // .storeUint(0, 1 + 4 + 4 + 64 + 32)
         // .storeBool(false)
         // .storeBool(true)
-        .storeUint(1, 107)
+        .storeUint(1, 106)
         .storeRef(body)
         .endCell(), 0);
         
