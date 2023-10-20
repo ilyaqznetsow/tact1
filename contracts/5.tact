@@ -178,7 +178,7 @@ contract Task5 with Deployable {
       require(sender() == self.owner, "Insufficient privileges");
     }
 
-    // acceptMessage();
+    acceptMessage();
 
     let body: Cell = beginCell()
         .storeUint(0x5fcc3d14, 32)
@@ -206,7 +206,7 @@ contract Task5 with Deployable {
         .storeBool(true)
         .storeInt(0,3)
         .storeAddress(self.items.get(self.itemsSize)!!)
-        .storeCoins(ton("0.02"))
+        .storeCoins(ton("0.08"))
         .storeUint(0, 1 + 4 + 4 + 64 + 32)
         .storeBool(false)
         .storeBool(true)
