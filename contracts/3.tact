@@ -139,11 +139,18 @@ contract Task3 with Deployable {
         {
             // self.sendJetton(self.jettonAddressB, amountB, user);
              nativeSendMessage(beginCell()
-              .storeInt(0x10,6)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-               .storeCoins(0)
-              .storeUint(0, 107)
-               .storeUint(0xf8a7ea5, 32)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountB)
                 .storeAddress(user)
@@ -151,18 +158,8 @@ contract Task3 with Deployable {
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
                 .storeSlice(beginCell().endCell().asSlice())
-              // .storeRef(
-              //   beginCell()
-              //   .storeUint(0xf8a7ea5, 32)
-              //   .storeUint(0, 64)
-              //   .storeCoins(amountB)
-              //   .storeAddress(user)
-              //   .storeAddress(myAddress())
-              //   .storeInt(0, 1)
-              //   .storeCoins(ton("0.01"))
-              //   .storeSlice(beginCell().endCell().asSlice())
-              //   .endCell()
-              //   )
+                .endCell()
+                )
               .endCell(), 64);
             return;
         }
@@ -170,11 +167,18 @@ contract Task3 with Deployable {
         // self.sendJetton(self.jettonAddressA, amountOut, user);
 
          nativeSendMessage(beginCell()
-              .storeInt(0x10,6)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-               .storeCoins(0)
-              .storeUint(0, 107)
-               .storeUint(0xf8a7ea5, 32)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
                 .storeAddress(user)
@@ -182,18 +186,8 @@ contract Task3 with Deployable {
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
                 .storeSlice(beginCell().endCell().asSlice())
-              // .storeRef(
-              //   beginCell()
-              //   .storeUint(0xf8a7ea5, 32)
-              //   .storeUint(0, 64)
-              //   .storeCoins(amountOut)
-              //   .storeAddress(user)
-              //   .storeAddress(myAddress())
-              //   .storeInt(0, 1)
-              //   .storeCoins(ton("0.01"))
-              //   .storeSlice(beginCell().endCell().asSlice())
-              //   .endCell()
-              //   )
+                .endCell()
+                )
               .endCell(), 64);
         self.aAmount = self.aAmount - amountOut;
         self.bAmount = self.bAmount + amountB;
@@ -205,11 +199,18 @@ contract Task3 with Deployable {
         {
           // self.sendJetton(self.jettonAddressA, amountA, user);
            nativeSendMessage(beginCell()
-              .storeInt(0x10, 6)
+              .storeInt(0, 6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-               .storeCoins(0)
-              .storeUint(0, 107)
-              .storeUint(0xf8a7ea5, 32)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountA)
                 .storeAddress(user)
@@ -217,29 +218,26 @@ contract Task3 with Deployable {
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
                 .storeSlice(beginCell().endCell().asSlice())
-              // .storeRef(
-              //   beginCell()
-              //   .storeUint(0xf8a7ea5, 32)
-              //   .storeUint(0, 64)
-              //   .storeCoins(amountA)
-              //   .storeAddress(user)
-              //   .storeAddress(myAddress())
-              //   .storeInt(0, 1)
-              //   .storeCoins(ton("0.01"))
-              //   .storeSlice(beginCell().endCell().asSlice())
-              //   .endCell()
-              //   )
+                .endCell()
+                )
               .endCell(), 64);
           return;
         }
 
         // self.sendJetton(self.jettonAddressB, amountOut, user);
          nativeSendMessage(beginCell()
-              .storeInt(0x10,6)
+              .storeInt(0,6)
+              // .storeBool(false)
+              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-              .storeCoins(0)
-              .storeUint(0, 107)
-               .storeUint(0xf8a7ea5, 32)
+              // .storeCoins(0)
+              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
+              // .storeBool(false)
+              // .storeBool(true)
+              .storeUint(1, 111)
+              .storeRef(
+                beginCell()
+                .storeUint(0xf8a7ea5, 32)
                 .storeUint(0, 64)
                 .storeCoins(amountOut)
                 .storeAddress(user)
@@ -247,18 +245,8 @@ contract Task3 with Deployable {
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
                 .storeSlice(beginCell().endCell().asSlice())
-              // .storeRef(
-              //   beginCell()
-              //   .storeUint(0xf8a7ea5, 32)
-              //   .storeUint(0, 64)
-              //   .storeCoins(amountOut)
-              //   .storeAddress(user)
-              //   .storeAddress(myAddress())
-              //   .storeInt(0, 1)
-              //   .storeCoins(ton("0.01"))
-              //   .storeSlice(beginCell().endCell().asSlice())
-              //   .endCell()
-              //   )
+                .endCell()
+                )
               .endCell(), 64);
         self.bAmount = self.bAmount - amountOut;
         self.aAmount = self.aAmount + amountA;
