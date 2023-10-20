@@ -62,18 +62,25 @@ contract Task4 with Deployable {
        nativeSendMessage(beginCell()
       .storeInt(0, 6)
       .storeAddress(sender())
-      .storeUint(1, 111)
-      .storeRef(
-        beginCell()
-        .storeUint(0x5fcc3d14, 32)
+      .storeUint(0, 111)
+      .storeUint(0x5fcc3d14, 32)
         .storeUint(msg.queryId, 64)
         .storeAddress(msg.prevOwner)
         .storeAddress(msg.prevOwner)
         .storeInt(0, 1)
         .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
-        .endCell()
-        )
+        // .storeSlice(beginCell().endCell().asSlice())
+      // .storeRef(
+      //   beginCell()
+      //   .storeUint(0x5fcc3d14, 32)
+      //   .storeUint(msg.queryId, 64)
+      //   .storeAddress(msg.prevOwner)
+      //   .storeAddress(msg.prevOwner)
+      //   .storeInt(0, 1)
+      //   .storeCoins(0)
+      //   .storeSlice(beginCell().endCell().asSlice())
+      //   .endCell()
+      //   )
       .endCell(), 64);
     }
     else {
@@ -86,38 +93,41 @@ contract Task4 with Deployable {
   receive(msg: NftWithdrawal) {
     require(sender() == self.nftOwner, "Invalid sender");
     nativeThrowUnless(123, msg.nftAddress == self.lockedNft!!);//, "Invalid NFT address");
-    let c: Builder = beginCell();
     if (now() < self.lockedUntil) {
-      c
+      nativeSendMessage(beginCell()
       .storeInt(0, 6)
       .storeAddress(sender())
       .storeUint(1, 111)
       .storeRef(
         "NFT is still locked".asComment()
-        );
-
-            nativeSendMessage(c.endCell(), 64);
-
+        )
+      .endCell(), 64);
     }
     else 
     {
-      c
+      nativeSendMessage(beginCell()
       .storeInt(0, 6)
       .storeAddress(self.lockedNft!!)
-      .storeUint(1, 111)
-      .storeRef(
-        beginCell()
-        .storeUint(0x5fcc3d14, 32)
+      .storeUint(0, 111)
+       .storeUint(0x5fcc3d14, 32)
         .storeUint( msg.queryId, 64)
         .storeAddress(self.nftOwner!!)
         .storeAddress(self.nftOwner!!)
         .storeInt(0, 1)
         .storeCoins(0)
-        .storeSlice(beginCell().endCell().asSlice())
-        .endCell()
-        );
-
-    nativeSendMessage(c.endCell(), 64);
+        // .storeSlice(beginCell().endCell().asSlice())
+      // .storeRef(
+      //   beginCell()
+      //   .storeUint(0x5fcc3d14, 32)
+      //   .storeUint( msg.queryId, 64)
+      //   .storeAddress(self.nftOwner!!)
+      //   .storeAddress(self.nftOwner!!)
+      //   .storeInt(0, 1)
+      //   .storeCoins(0)
+      //   .storeSlice(beginCell().endCell().asSlice())
+      //   .endCell()
+      //   )
+      .endCell(), 64);
 
       self.lockedNft = null;
       self.nftOwner = null;
