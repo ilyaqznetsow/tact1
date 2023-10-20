@@ -28,9 +28,9 @@ contract Task2 with Deployable {
   receive(msg: Refund) {
     require(sender() == self.admin, "Invalid sender");
     nativeSendMessage(beginCell()
-    .storeInt(1,2)
-    .storeBool(false)
-    .storeInt(0,3)
+    .storeInt(1,6)
+    // .storeBool(false)
+    // .storeInt(0,3)
     .storeAddress(msg.sender)
     .storeCoins(0)
     .storeUint(0, 1 + 4 + 4 + 64 + 32)
@@ -54,7 +54,7 @@ contract Task2 with Deployable {
     .storeUint(0, 1 + 4 + 4 + 64 + 32)
     .storeBool(false)
     .storeBool(true)
-    .storeRef(beginCell().storeAddress(sender()).storeSlice(msg).endCell())
+    .storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell())
     .endCell(), 64);
     // send(SendParameters{
     //   to: self.admin,
