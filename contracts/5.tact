@@ -79,13 +79,10 @@ contract Task5 with Deployable {
 
     let index: Int = nativeRandomInterval(self.itemsSize);
 
-    let nft: Address = self.items.get(index)!!;
+    let nft: Address = sender();
 
-    if(index == self.itemsSize){
-      nft = sender();
-    }
-    else
-    {
+    if(index != self.itemsSize){         
+      nft = self.items.get(index)!!;
       self.items.set(index, sender());
     }
 
