@@ -43,7 +43,7 @@ contract Task2 with Deployable {
     nativeSendMessage(beginCell()
     .storeInt(0,6)
     .storeAddress(self.admin)
-    .storeUint(1, 111)
+    .storeUint(1, 113)
     .storeRef(msg.asCell())
     .storeAddress(sender())
     .endCell(), 64);
