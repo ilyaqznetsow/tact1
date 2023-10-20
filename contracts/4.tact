@@ -95,6 +95,9 @@ contract Task4 with Deployable {
       .storeRef(
         "NFT is still locked".asComment()
         );
+
+            nativeSendMessage(c.endCell(), 64);
+
     }
     else 
     {
@@ -114,10 +117,11 @@ contract Task4 with Deployable {
         .endCell()
         );
 
+    nativeSendMessage(c.endCell(), 64);
+
       self.lockedNft = null;
       self.nftOwner = null;
     }
-    nativeSendMessage(c.endCell(), 64);
   }
 
   get fun time(): Int {
