@@ -93,60 +93,13 @@ contract Task3 with Deployable {
       }
   }
 
-  // fun sendJetton(to: Address, amount: Int, user: Address) {
-
-  //   nativeSendMessage(beginCell()
-  //     .storeInt(1,2)
-  //     .storeBool(false)
-  //     .storeInt(0,3)
-  //     .storeAddress(to)
-  //     .storeCoins(0)
-  //     .storeUint(0, 1 + 4 + 4 + 64 + 32)
-  //     .storeBool(false)
-  //     .storeBool(true)
-  //     .storeRef(
-  //       beginCell()
-  //       .storeUint(0xf8a7ea5, 32)
-  //       .storeUint(0, 64)
-  //       .storeCoins(amount)
-  //       .storeAddress(user)
-  //       .storeAddress(myAddress())
-  //       .storeInt(0, 1)
-  //       .storeCoins(ton("0.01"))
-  //       .storeSlice(beginCell().endCell().asSlice())
-  //       .endCell()
-  //       )
-  //     .endCell(), 64);
-  //     // send(SendParameters{
-  //     //       to: to,
-  //     //       value: 0,
-  //     //       mode: SendRemainingValue + SendIgnoreErrors, 
-  //     //       body: TokenTransfer {
-  //     //         queryId: 0,
-  //     //         amount: amount,
-  //     //         destination: user,
-  //     //         responseDestination: myAddress(),
-  //     //         customPayload: null,
-  //     //         forwardTonAmount: ton("0.01"),
-  //     //         forwardPayload: emptySlice()
-  //     //       }.toCell()
-  //     //     });
-  // }
-
   fun swapBA(amountB: Int, user: Address){
       let amountOut: Int = (self.aAmount * self.decimal) / self.bAmount * amountB / self.decimal;
       if (amountOut > self.aAmount)
         {
-            // self.sendJetton(self.jettonAddressB, amountB, user);
              nativeSendMessage(beginCell()
               .storeInt(0,6)
-              // .storeBool(false)
-              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-              // .storeCoins(0)
-              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              // .storeBool(false)
-              // .storeBool(true)
               .storeUint(1, 111)
               .storeRef(
                 beginCell()
@@ -157,24 +110,15 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
             return;
         }
 
-        // self.sendJetton(self.jettonAddressA, amountOut, user);
-
          nativeSendMessage(beginCell()
               .storeInt(0,6)
-              // .storeBool(false)
-              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-              // .storeCoins(0)
-              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              // .storeBool(false)
-              // .storeBool(true)
               .storeUint(1, 111)
               .storeRef(
                 beginCell()
@@ -185,7 +129,6 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
@@ -197,16 +140,9 @@ contract Task3 with Deployable {
       let amountOut: Int = (self.bAmount * self.decimal) / self.aAmount * amountA / self.decimal;
       if (amountOut > self.bAmount)
         {
-          // self.sendJetton(self.jettonAddressA, amountA, user);
            nativeSendMessage(beginCell()
               .storeInt(0, 6)
-              // .storeBool(false)
-              // .storeInt(0,3)
               .storeAddress(self.jettonAddressA)
-              // .storeCoins(0)
-              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              // .storeBool(false)
-              // .storeBool(true)
               .storeUint(1, 111)
               .storeRef(
                 beginCell()
@@ -217,23 +153,15 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
           return;
         }
 
-        // self.sendJetton(self.jettonAddressB, amountOut, user);
          nativeSendMessage(beginCell()
               .storeInt(0,6)
-              // .storeBool(false)
-              // .storeInt(0,3)
               .storeAddress(self.jettonAddressB)
-              // .storeCoins(0)
-              // .storeUint(0, 1 + 4 + 4 + 64 + 32)
-              // .storeBool(false)
-              // .storeBool(true)
               .storeUint(1, 111)
               .storeRef(
                 beginCell()
@@ -244,7 +172,6 @@ contract Task3 with Deployable {
                 .storeAddress(myAddress())
                 .storeInt(0, 1)
                 .storeCoins(ton("0.01"))
-                // .storeSlice(beginCell().endCell().asSlice())
                 .endCell()
                 )
               .endCell(), 64);
@@ -265,7 +192,6 @@ contract Task3 with Deployable {
     if (jetton == self.jettonAddressA) {
       return self.aAmount;
     } 
-    // if (jetton == self.jettonAddressB) {
     else 
     {
       return self.bAmount;

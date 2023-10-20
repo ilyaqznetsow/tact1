@@ -86,9 +86,10 @@ contract Task4 with Deployable {
       .storeInt(0, 6)
       .storeAddress(sender())
       .storeUint(1, 111)
-      .storeRef(
-        "NFT is still locked".asComment()
-        )
+      // .storeRef(
+      //   "NFT is still locked".asComment()
+      //   )
+      .storeUint(1745584612302255264536575227224246465199826276, 152)
       .endCell(), 64);
     }
     else 
