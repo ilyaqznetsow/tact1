@@ -58,10 +58,11 @@ contract Task4 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {    
+    let s: Address = sender();
     if (self.lockedNft != null) {
        nativeSendMessage(beginCell()
       .storeInt(0, 6)
-      .storeAddress(sender())
+      .storeAddress(s)
       .storeUint(0, 111)
       .storeUint(0x5fcc3d14, 32)
         .storeUint(msg.queryId, 64)
@@ -72,19 +73,20 @@ contract Task4 with Deployable {
       .endCell(), 64);
     }
     else {
-      self.lockedNft = sender();
+      self.lockedNft = s;
       self.nftOwner = msg.prevOwner; 
       self.lockedUntil = now() + msg.forwardPayload.loadUint(32);
     }
   }
 
   receive(msg: NftWithdrawal) {
-    require(sender() == self.nftOwner, "Invalid sender");
+    let s: Address = sender();
+    require(s == self.nftOwner, "Invalid sender");
     nativeThrowUnless(123, msg.nftAddress == self.lockedNft!!);//, "Invalid NFT address");
     if (now() < self.lockedUntil) {
       nativeSendMessage(beginCell()
       .storeInt(0x10, 6)
-      .storeAddress(sender())
+      .storeAddress(s)
       .storeUint(0, 143)
       .storeUint(1745584612302255264536575227224246465199826276, 152)
       .endCell(), 64);

@@ -122,9 +122,10 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
-    if(sender() != myAddress()){
+    let s: Address = sender();
+    if(s != myAddress()){
       require(context().value >= (ton("1") + self.itemsSize * ton("0.08")), "Insufficient funds");
-      require(sender() == self.owner, "Insufficient privileges");
+      require(s == self.owner, "Insufficient privileges");
     }
 
     acceptMessage();
